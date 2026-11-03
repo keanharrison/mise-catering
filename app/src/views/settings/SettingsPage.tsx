@@ -1,9 +1,10 @@
-import { useMemo, useRef, useState, type FormEvent } from 'react'
+import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { toast } from 'sonner'
 import { Button } from '../../components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
-import { destinationIcons, destinationTones } from '../../components/destinationIcons'
-import { FeatureCardHeader } from '../../components/FeatureCardHeader'
+import { Check } from '../../components/icons'
+import { authConfigured, supabase } from '../../lib/supabase'
+import { signOut } from '../../state/auth'
 import { Field, FieldError, FieldGroup, FieldLabel } from '../../components/ui/field'
 import { Input } from '../../components/ui/input'
 import { Label } from '../../components/ui/label'
@@ -26,6 +27,18 @@ function CustomerSettings() {
   const [saveError, setSaveError] = useState('')
   const [saving, setSaving] = useState(false)
   const savingRef = useRef(false)
+  const [signInEmail, setSignInEmail] = useState<string | null>(null)
+  const [verified, setVerified] = useState(false)
+  useEffect(() => {
+    supabase?.auth.getUser().then(({ data }) => {
+      setSignInEmail(data.user?.email ?? null)
+      setVerified(Boolean(data.user?.email_confirmed_at))
+    })
+  }, [])
+  async function signOutOthers() {
+    await supabase?.auth.signOut({ scope: 'others' })
+    toast.success('Signed out of your other devices.')
+  }
   const dirty = useMemo(() => (Object.keys(emptyCustomerProfile) as (keyof CustomerProfile)[]).some((key) => profile[key] !== savedProfile[key]), [profile, savedProfile])
 
   function update<K extends keyof CustomerProfile>(key: K, value: CustomerProfile[K]) {
@@ -83,29 +96,54 @@ function CustomerSettings() {
     { key: 'organization', label: 'Company or organization', autocomplete: 'organization', optional: true },
   ]
 
-  return <section className="mx-auto w-full max-w-3xl px-5 py-6 sm:px-8 sm:py-8">
-    <header className="mb-6"><h1 className="type-page-title">Account settings</h1></header>
-    <div className="dot-field">
-    <Card variant="feature"><FeatureCardHeader icon={destinationIcons.accountSettings} tone={destinationTones.accountSettings!} title="Contact information" />
-      <CardContent><CardDescription className="mb-5">Saved details can fill blank contact fields on new requests. Existing drafts and orders keep their original information.</CardDescription><form onSubmit={save} noValidate>
-        <FieldGroup>{fields.map(({ key, label, autocomplete, type, optional }) => {
+  const initial = (savedProfile.name.trim()[0] ?? savedProfile.email.trim()[0] ?? '?').toUpperCase()
+  const underline = 'h-10 rounded-none border-0 border-b border-b-foreground/40 bg-transparent px-0 text-lead shadow-none focus-visible:border-b-primary focus-visible:ring-0 dark:bg-transparent'
+
+  return <section className="mx-auto w-full max-w-3xl px-5 py-8 sm:px-8 sm:py-12">
+    <h1 className="sr-only">Account settings</h1>
+    <form onSubmit={save} noValidate className="flex flex-col gap-8 sm:flex-row sm:gap-10">
+      <div aria-hidden="true" className="flex size-28 shrink-0 select-none items-center justify-center self-start rounded-full bg-secondary text-4xl font-medium text-muted-foreground">{initial}</div>
+      <div className="min-w-0 flex-1">
+        <FieldGroup className="max-w-md gap-7">{fields.map(({ key, label, autocomplete, type, optional }) => {
           const id = `profile-${key}`
           const errorId = `${id}-error`
           return <Field key={key} data-invalid={Boolean(errors[key]) || undefined}>
-            <FieldLabel htmlFor={id}>{label}{optional ? ' (optional)' : ' (required)'}</FieldLabel>
-            <Input id={id} name={key} type={type ?? 'text'} autoComplete={autocomplete} required={!optional} value={profile[key]} aria-invalid={Boolean(errors[key])} aria-describedby={errors[key] ? errorId : key === 'email' ? 'profile-email-help' : undefined} onChange={(event) => update(key, event.target.value)} />
+            <FieldLabel htmlFor={id} className="text-lead font-normal text-muted-foreground">{label}{optional ? ' (optional)' : ' (required)'}</FieldLabel>
+            <Input id={id} name={key} type={type ?? 'text'} autoComplete={autocomplete} required={!optional} value={profile[key]} aria-invalid={Boolean(errors[key])} aria-describedby={errors[key] ? errorId : undefined} className={underline} onChange={(event) => update(key, event.target.value)} />
             {errors[key] && <FieldError id={errorId}>{errors[key]}</FieldError>}
-            
           </Field>
         })}</FieldGroup>
-        {saveError && <Alert variant="destructive" className="mt-5"><AlertTitle>Could not save changes</AlertTitle><AlertDescription>{saveError}</AlertDescription></Alert>}
-        <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-          <Button type="button" variant="outline" disabled={!dirty || saving} onClick={discard}>Discard changes</Button>
-          <Button type="submit" disabled={!dirty || saving}>{saving ? 'Saving…' : 'Save changes'}</Button>
+        {saveError && <Alert variant="destructive" className="mt-6 max-w-md"><AlertTitle>Could not save changes</AlertTitle><AlertDescription>{saveError}</AlertDescription></Alert>}
+        <div className="mt-7 flex items-center gap-5">
+          <Button type="submit" disabled={!dirty || saving}>{saving ? 'Saving…' : 'Save'}</Button>
+          <button type="button" disabled={!dirty || saving} onClick={discard} className="text-body font-medium text-foreground outline-none hover:text-primary-ink focus-visible:underline disabled:cursor-not-allowed disabled:text-muted-foreground">Cancel</button>
         </div>
-      </form></CardContent>
-    </Card>
-    </div>
+        <p className="mt-5 max-w-md text-ui text-muted-foreground">Saved details fill blank contact fields on new requests. Existing drafts and orders keep their original information.</p>
+
+        <hr className="my-10 border-border" />
+        <div>
+          <h2 className="text-heading font-semibold">Emails</h2>
+          <p className="mt-1 text-ui text-muted-foreground">We send email about your requests to your primary email.</p>
+          <div className="mt-5 flex flex-wrap items-center gap-3 border border-border px-4 py-4">
+            <span className="text-lead">{signInEmail ?? (savedProfile.email || 'No email saved yet')}</span>
+            <span className="bg-foreground px-2 py-0.5 text-caption font-medium text-background">Primary</span>
+            {verified && <span className="inline-flex items-center gap-1 text-ui text-success"><Check aria-hidden="true" style={{ width: 14, height: 14 }} />Verified</span>}
+          </div>
+        </div>
+
+        {authConfigured && <>
+          <hr className="my-10 border-border" />
+          <div>
+            <h2 className="text-heading font-semibold">Sessions</h2>
+            <p className="mt-1 max-w-lg text-ui text-muted-foreground">Sign out on every other browser and device. You stay signed in here.</p>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <Button type="button" variant="outline" onClick={() => void signOutOthers()}>Sign out other devices</Button>
+              <Button type="button" variant="outline" onClick={() => void signOut()}>Sign out</Button>
+            </div>
+          </div>
+        </>}
+      </div>
+    </form>
   </section>
 }
 
