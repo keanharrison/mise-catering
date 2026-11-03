@@ -1,66 +1,49 @@
 import { Link, useLocation } from 'react-router-dom'
-import { IconUser, PanelLeftIcon } from './icons'
-import { NotificationsMenu } from './NotificationsMenu'
+import { PanelLeftIcon } from './icons'
 import { useSidebar } from '@/components/ui/sidebar'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { pageTitle } from '@/lib/pageTitle'
 import { routes } from '@/routes'
 import { useDemoAccount } from '@/state/demoAccount'
 import { readCustomerProfile } from '@/state/customerProfile'
+import { mise } from './mise'
 
-function initials(name: string) {
-  const letters = name.trim().split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0].toUpperCase())
-  return letters.join('')
-}
-
-// The persistent top bar: sidebar toggle and page title on the left; notifications, Ask Pearl and account on the right.
+// The persistent top bar, laid out like the Mise sign-in nav: white bar, orange rule underneath, mono 12px text.
+// Sidebar toggle and page title on the left; the account link on the right.
 export function SiteHeader() {
   const { pathname } = useLocation()
   const { account } = useDemoAccount()
   const { toggleSidebar, open, openMobile, isMobile } = useSidebar()
   const accountPath = account === 'team' ? routes.staffSettings : routes.settings
-  const initialsText = account === 'team' ? '' : initials(readCustomerProfile().name)
+  const accountLabel = account === 'team' ? 'Account' : readCustomerProfile().name.trim() || 'Account'
   const sidebarShown = isMobile ? openMobile : open
 
   return (
-    <header data-slot="site-header" className="sticky top-0 z-40 flex h-[3.25rem] w-full shrink-0 items-center gap-2 border-b border-[#ececec] bg-background px-3 sm:px-4">
+    <header data-slot="site-header" className="sticky top-0 z-40 flex h-[3.25rem] w-full shrink-0 items-center gap-2 border-b border-primary bg-background px-3 sm:px-4">
       <Tooltip>
         <TooltipTrigger
           aria-label="Toggle navigation"
           aria-expanded={sidebarShown}
           onClick={toggleSidebar}
-          render={<button type="button" className="flex size-11 shrink-0 items-center justify-center rounded-xl text-foreground transition-colors duration-150 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:size-9" />}
+          render={<button type="button" className="flex size-11 shrink-0 items-center justify-center text-foreground transition-colors duration-150 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:size-9" />}
         >
           <PanelLeftIcon aria-hidden="true" />
         </TooltipTrigger>
         <TooltipContent side="bottom">{sidebarShown ? 'Close sidebar' : 'Open sidebar'}</TooltipContent>
       </Tooltip>
       <div className="flex min-w-0 flex-1 items-center gap-2 pl-1">
-        <p className="truncate text-heading leading-6 tracking-[0.01em] text-foreground">{pageTitle(pathname, account)}</p>
-        {pathname === routes.askPearl && <span className="shrink-0 rounded-full bg-secondary px-2.5 py-1 text-caption leading-none text-foreground">Preview</span>}
+        <p className={`truncate text-foreground ${mise.mono}`}>{pageTitle(pathname, account)}</p>
+        {pathname === routes.askPearl && <span className="shrink-0 border border-primary px-2 py-0.5 font-mono text-[11px] leading-none text-primary-ink">Preview</span>}
       </div>
 
-      <nav aria-label="Notifications and account" className="flex shrink-0 items-center gap-2">
-        {account !== 'team' && (
-          <Link
-            to={routes.askPearl}
-            aria-label="Ask"
-            aria-current={pathname === routes.askPearl ? 'page' : undefined}
-            className="inline-flex h-11 items-center gap-2 rounded-xl bg-background px-3 text-body tracking-[0.01em] text-foreground no-underline shadow-[inset_0_0_0_1px_var(--input)] transition-colors duration-150 hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:bg-secondary md:h-9"
-          >
-            <span aria-hidden="true" className="text-heading font-bold leading-none tracking-[-0.03em]">X</span>
-            <span aria-hidden="true" className="hidden sm:inline">Ask</span>
-          </Link>
-        )}
-        <NotificationsMenu />
+      <nav aria-label="Account" className="flex shrink-0 items-center gap-4">
         <Link
           to={accountPath}
           aria-label="Account settings"
           aria-current={pathname === accountPath ? 'page' : undefined}
-          data-icon-surface
-          className="flex size-11 shrink-0 items-center justify-center rounded-full bg-secondary text-caption font-medium text-foreground no-underline shadow-[inset_0_0_0_1px_var(--input)] transition-colors duration-150 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:shadow-[inset_0_0_0_1.5px_var(--foreground)] md:size-9"
+          className={`max-w-40 truncate px-1 py-3 text-foreground no-underline transition-colors hover:text-primary focus-visible:underline focus-visible:outline-none aria-[current=page]:text-primary-ink ${mise.mono}`}
         >
-          {initialsText ? <span aria-hidden="true">{initialsText}</span> : <IconUser aria-hidden="true" />}
+          {accountLabel}
         </Link>
       </nav>
     </header>
