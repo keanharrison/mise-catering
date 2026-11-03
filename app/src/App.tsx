@@ -8,6 +8,7 @@ import { DetailsPage } from './views/customer/DetailsPage'
 import { ReviewPage } from './views/customer/ReviewPage'
 import { AppShell } from './components/AppShell'
 import { DemoAccountProvider, useDemoAccount } from './state/demoAccount'
+import { AuthGate } from './state/AuthGate'
 import { useDemoStore } from './state/store'
 import { stagePath } from './views/customer/journey'
 import { StaffPage } from './views/staff/StaffPage'
@@ -72,9 +73,11 @@ export default function App() {
   return (
     <BrowserRouter>
       <DemoAccountProvider>
-        <AppShell>
-          <AppRoutes />
-        </AppShell>
+        <AuthGate>
+          <AppShell>
+            <AppRoutes />
+          </AppShell>
+        </AuthGate>
       </DemoAccountProvider>
     </BrowserRouter>
   )

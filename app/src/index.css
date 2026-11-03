@@ -1,4 +1,5 @@
-@import '@fontsource-variable/inter';
+@import '@fontsource-variable/space-grotesk';
+@import '@fontsource/jetbrains-mono/400.css';
 @import 'tailwindcss';
 @import './components/menu.css';
 @import "tw-animate-css";
@@ -35,7 +36,8 @@
   --text-caption--line-height: 1.35;
   --text-sm: 0.8125rem;
   --text-sm--line-height: 1.25rem;
-  --font-sans: 'Inter Variable', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans: 'Space Grotesk Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
 }
 
 @layer components {
@@ -178,7 +180,9 @@
 
 @theme inline {
   --font-heading: var(--font-sans);
-  --font-sans: 'Inter Variable', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  --font-sans: 'Space Grotesk Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -200,6 +204,8 @@
   --color-info: var(--info);
   --color-info-soft: var(--info-soft);
   --color-primary-hover: var(--primary-hover);
+  --color-primary-ink: var(--primary-ink);
+  --color-field-border: var(--field-border);
   --color-link: var(--link);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -235,12 +241,15 @@
   --card-foreground: #0f0f10;
   --popover: #fff;
   --popover-foreground: #0f0f10;
-  --primary: #0f0f10;
-  --primary-hover: #2e2e2e;
+  /* Mise brand: white canvas, one orange accent (#ff6600) for primary actions, thin orange rules and field borders. */
+  --primary: #ff6600;
+  --primary-hover: #cc5200;
   --primary-foreground: #fff;
-  --link: #0f0f10;
-  --link-hover: #2e2e2e;
-  --selection: rgb(0 0 0 / 0.12);
+  /* Darker orange for orange text on white (links, outlined-button labels): 4.6:1. */
+  --primary-ink: #b84a00;
+  --link: #b84a00;
+  --link-hover: #8f3a00;
+  --selection: rgb(255 102 0 / 0.22);
   --secondary: #f5f5f5;
   --secondary-foreground: #0f0f10;
   --muted: #f5f5f5;
@@ -255,31 +264,33 @@
   --warning-soft: #fff4e0;
   --info: #0a59d2;
   --info-soft: #eaf2ff;
-  --border: #e7e7e7;
+  --border: #ffd9c2;
   --input: #e5e5e5;
+  --field-border: #ff6600;
   /* Fill for a disabled primary action (Continue, Save changes, Send). */
   --disabled-fill: #c3c3c3;
-  /* Colored icon tiles inside pages (never in the sidebar). White glyphs on each pass 4.8:1. Red, amber, green and blue stay reserved for status. */
-  --tile-indigo: #4f46e5;
-  --tile-violet: #7c3aed;
-  --tile-teal: #0f766e;
-  --tile-sky: #0b78b5;
-  --tile-slate: #475569;
-  --ring: #0f0f10;
+  /* Icon tiles are one near-black so the orange accent stays the only brand color. Icon tiles inside pages (never in the sidebar). White glyphs on each pass 4.8:1. Red, amber, green and blue stay reserved for status. */
+  --tile-indigo: #171717;
+  --tile-violet: #171717;
+  --tile-teal: #171717;
+  --tile-sky: #171717;
+  --tile-slate: #171717;
+  --ring: #ff6600;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
+  /* Sharp corners everywhere, as on the Mise sign-in. Pills (rounded-full) are unaffected. */
+  --radius: 0;
   --sidebar: #fafafa;
   --sidebar-foreground: #6b6b6b;
-  --sidebar-primary: #0f0f10;
+  --sidebar-primary: #ff6600;
   --sidebar-primary-foreground: #fff;
   --sidebar-accent: #efefef;
   --sidebar-accent-foreground: #171717;
-  --sidebar-border: #e7e7e7;
-  --sidebar-ring: #0f0f10;
+  --sidebar-border: #ff6600;
+  --sidebar-ring: #ff6600;
 }
 
 

@@ -5,6 +5,9 @@ import './components/texture.css'
 import App from './App.tsx'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { useDemoStore } from './state/store'
+import { applyStoredTheme } from './lib/applyTheme'
+
+applyStoredTheme()
 
 // First visit on this computer: load Pearl Island's starting requests once. Deleted ones never come back.
 useDemoStore.getState().seedStartingRequests()

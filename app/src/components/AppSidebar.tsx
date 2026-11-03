@@ -32,6 +32,8 @@ import { destinationIcons } from './destinationIcons'
 import { routes } from '@/routes'
 import { stages } from '@/views/customer/journey'
 import { demoAccountLabels, useDemoAccount, type DemoAccount } from '@/state/demoAccount'
+import { authConfigured } from '@/lib/supabase'
+import { signOut } from '@/state/auth'
 import { useNavigate } from 'react-router-dom'
 import { useDemoStore } from '@/state/store'
 
@@ -108,11 +110,11 @@ export function AppSidebar() {
               aria-label={`${demoAccountLabels[account]} account menu`}
               render={<button type="button" className="linear-workspace-brand" />}
             >
-              <span className="linear-wordmark" aria-hidden="true">X</span>
+              <svg className="mise-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M48 48H0V0h48z" fill="var(--primary)" /><path d="M12 36V12h3.6L24 25.2 32.4 12H36v24h-3.4V18.6L24 31.4l-8.6-12.8V36z" fill="var(--primary-foreground)" /></svg>
               <ChevronDown aria-hidden="true" />
             </DropdownMenuTrigger>
             <DropdownMenuContent side="bottom" align="start" className="linear-menu w-60">
-              <DropdownMenuSub>
+              {!authConfigured && <DropdownMenuSub>
                 <DropdownMenuSubTrigger>Switch account</DropdownMenuSubTrigger>
                 <DropdownMenuPortal>
                   <DropdownMenuSubContent className="linear-menu">
@@ -122,7 +124,7 @@ export function AppSidebar() {
                     </DropdownMenuRadioGroup>
                   </DropdownMenuSubContent>
                 </DropdownMenuPortal>
-              </DropdownMenuSub>
+              </DropdownMenuSub>}
               <DropdownMenuItem
                 onClick={() => {
                   navigate(account === 'team' ? routes.staffSettings : routes.settings)
@@ -132,7 +134,7 @@ export function AppSidebar() {
                 Account settings
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => window.location.assign('/pearl-login.html')}>Log out</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => void signOut()}>Log out</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           <MobileSidebarClose />

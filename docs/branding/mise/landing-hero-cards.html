@@ -1,0 +1,130 @@
+<!doctype html>
+<!--
+  Mise landing page — hero "stamp cards" (reference, not used in the product).
+  Adapted from the YC Paxel reports page: fanned, slightly rotated portrait cards with a dashed
+  "perforation" frame, punched holes, dithered orange art, and peer pushback on hover.
+  Differences from the original: the art is generated here with an ordered-dither field (the original
+  used pre-rendered PNGs), and the copy is catering placeholder text to replace.
+  When building the landing page: move the CSS into the page, keep the JS (renders each card's art once),
+  and replace the sample questions/answers. Open this file directly in a browser to preview.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mise · hero cards reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #fff; --ink: #111; --line: #ff6600; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Space Grotesk', system-ui, sans-serif; }
+
+  /* ── Cards: 5 per row, fanned ── */
+  .cards { display: flex; flex-direction: column; align-items: center; margin: 36px auto 72px; padding: 28px 0; width: 100%; max-width: 960px; }
+  .cards-row { display: flex; justify-content: center; align-items: flex-end; }
+  .cards-row:not(:first-child) { margin-top: -40px; }
+
+  .card {
+    --rot: 0deg;
+    /* One variable drives the whole card; every inner size is a fraction of --card-w so it scales uniformly. */
+    --card-w: clamp(150px, 18.5vw, 220px);
+    display: flex; flex-direction: column; flex: none;
+    width: var(--card-w); aspect-ratio: 11 / 16;
+    margin-left: calc(var(--card-w) * -0.2);
+    background: #fff; border: 1px solid var(--line); border-radius: 0; padding: 0;
+    cursor: pointer; text-align: left; font-family: inherit; color: inherit;
+    position: relative; z-index: 1;
+    transform: rotate(var(--rot)); transform-origin: 50% 100%;
+    transition: transform .6s cubic-bezier(.32,.72,0,1), box-shadow .6s cubic-bezier(.32,.72,0,1);
+    will-change: transform; backface-visibility: hidden; overflow: hidden;
+    box-shadow: 0 6px 16px -8px rgba(0,0,0,.18);
+    /* Three punched holes across the top (page shows through). */
+    -webkit-mask:
+      radial-gradient(circle calc(var(--card-w) * .032) at calc(50% - var(--card-w) * .109) calc(var(--card-w) * .073), #0000 calc(var(--card-w) * .0273), #000 calc(var(--card-w) * .0295)),
+      radial-gradient(circle calc(var(--card-w) * .032) at 50% calc(var(--card-w) * .073), #0000 calc(var(--card-w) * .0273), #000 calc(var(--card-w) * .0295)),
+      radial-gradient(circle calc(var(--card-w) * .032) at calc(50% + var(--card-w) * .109) calc(var(--card-w) * .073), #0000 calc(var(--card-w) * .0273), #000 calc(var(--card-w) * .0295));
+    -webkit-mask-composite: source-in;
+    mask:
+      radial-gradient(circle calc(var(--card-w) * .032) at calc(50% - var(--card-w) * .109) calc(var(--card-w) * .073), #0000 calc(var(--card-w) * .0273), #000 calc(var(--card-w) * .0295)),
+      radial-gradient(circle calc(var(--card-w) * .032) at 50% calc(var(--card-w) * .073), #0000 calc(var(--card-w) * .0273), #000 calc(var(--card-w) * .0295)),
+      radial-gradient(circle calc(var(--card-w) * .032) at calc(50% + var(--card-w) * .109) calc(var(--card-w) * .073), #0000 calc(var(--card-w) * .0273), #000 calc(var(--card-w) * .0295));
+    mask-composite: intersect;
+  }
+  /* Dashed perforation frame, like a postage stamp. */
+  .card::after { content: ""; position: absolute; inset: calc(var(--card-w) * .0273); border: 1px dashed var(--line); pointer-events: none; z-index: 3; }
+  .cards-row .card:first-child { margin-left: 0; }
+  .cards-row .card:nth-child(1) { --rot: -3deg; }
+  .cards-row .card:nth-child(2) { --rot: -1.5deg; }
+  .cards-row .card:nth-child(3) { --rot: 0deg; }
+  .cards-row .card:nth-child(4) { --rot: 1.5deg; }
+  .cards-row .card:nth-child(5) { --rot: 3deg; }
+
+  .card:hover {
+    z-index: 100; transform: rotate(0deg) translateY(-12px) scale(1.03);
+    box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 16px -4px rgba(0,0,0,.10), 0 30px 50px -18px rgba(0,0,0,.22), 0 0 0 1px rgba(255,102,0,.18);
+  }
+  .card:active { transform: rotate(0deg) translateY(-6px) scale(1.015); transition-duration: .2s; }
+  /* Peers slide outward so the hovered card has room. */
+  .cards-row .card:hover ~ .card { transform: rotate(var(--rot)) translateX(32px); }
+  .cards-row .card:has(~ .card:hover) { transform: rotate(var(--rot)) translateX(-32px); }
+
+  .card-art { width: 100%; aspect-ratio: 220 / 138; flex: none; display: block; image-rendering: pixelated; background: var(--bg); }
+  .card-body { padding: calc(var(--card-w) * .064) calc(var(--card-w) * .073) calc(var(--card-w) * .073); flex: 1; min-height: 0; display: flex; flex-direction: column; gap: calc(var(--card-w) * .027); overflow: hidden; }
+  .card-q { font-size: calc(var(--card-w) * .05); line-height: 1.3; color: var(--line); letter-spacing: -.01em; margin: 0 0 calc(var(--card-w) * .009); }
+  .card-title { font-weight: 600; font-size: calc(var(--card-w) * .068); line-height: 1.25; letter-spacing: -.01em; margin: 0; }
+  .card-detail { font-size: calc(var(--card-w) * .059); line-height: 1.45; margin: 0; }
+  .card-q, .card-title, .card-detail { transition: transform .55s cubic-bezier(.32,.72,0,1); }
+  .card:hover .card-q { transform: translateY(-1px); }
+  .card:hover .card-title, .card:hover .card-detail { transform: translateY(-2px); }
+
+  /* Phones: one horizontal swipe carousel, first card aligned with the text column. */
+  @media (max-width: 760px) {
+    .cards { --card-w: min(74vw, 260px); width: 100vw; position: relative; left: 50%; margin: 24px 0 56px -50vw; max-width: none; flex-direction: row; flex-wrap: nowrap; align-items: center; gap: 16px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding: 4px 20px; scroll-padding-left: 20px; }
+    .cards::-webkit-scrollbar { display: none; }
+    .cards-row { display: contents; }
+    .card { --card-w: min(74vw, 260px); margin-left: 0; flex: 0 0 auto; transform: none; scroll-snap-align: start; }
+    .card:hover, .cards-row .card:hover ~ .card, .cards-row .card:has(~ .card:hover) { transform: none; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+  <!-- Replace the copy. Each card: a question (orange), a short answer title, one line of detail. -->
+  <div class="cards" role="list" aria-label="Examples">
+    <div class="cards-row">
+      <button class="card" role="listitem" data-seed="1022"><canvas class="card-art"></canvas><div class="card-body"><p class="card-q">How many are you feeding?</p><h3 class="card-title">Forty guests, one tray plan</h3><p class="card-detail">Tell us the headcount and we size every item so nobody runs short.</p></div></button>
+      <button class="card" role="listitem" data-seed="1016"><canvas class="card-art"></canvas><div class="card-body"><p class="card-q">What about dietary needs?</p><h3 class="card-title">Vegetarian and nut-free, handled</h3><p class="card-detail">Dietary tags travel with the order so the kitchen sees them first.</p></div></button>
+      <button class="card" role="listitem" data-seed="1036"><canvas class="card-art"></canvas><div class="card-body"><p class="card-q">How fast is the answer?</p><h3 class="card-title">Confirmed, not just submitted</h3><p class="card-detail">Customers always know whether the restaurant has accepted the order.</p></div></button>
+      <button class="card" role="listitem" data-seed="1019"><canvas class="card-art"></canvas><div class="card-body"><p class="card-q">Changed your mind?</p><h3 class="card-title">Edits without starting over</h3><p class="card-detail">Staff propose a change; the customer approves it in one tap.</p></div></button>
+      <button class="card" role="listitem" data-seed="1037"><canvas class="card-art"></canvas><div class="card-body"><p class="card-q">Where does it land?</p><h3 class="card-title">Straight onto the calendar</h3><p class="card-detail">One order record, ready for the kitchen and the schedule.</p></div></button>
+    </div>
+  </div>
+
+<script>
+  // Ordered-dither art: orange (top) fading through peach to white (bottom). Rendered once per card.
+  (function () {
+    var PALETTE = [[255,102,0],[255,185,143],[255,255,255]];
+    var CELL = 4;
+    function bayer(n){ if(n===1) return [[0]]; var p=bayer(n/2),m=[],y,x; for(y=0;y<n;y++){m.push([]);for(x=0;x<n;x++){m[y].push(p[y%(n/2)][x%(n/2)]*4+[[0,2],[3,1]][Math.floor(y/(n/2))][Math.floor(x/(n/2))]);}} return m; }
+    var B8 = bayer(8);
+    function hash(x,y,s){ var h=(x*374761393+y*668265263+s*2147483647)|0; h=Math.imul(h^(h>>>13),1274126177); return ((h^(h>>>16))>>>0)/4294967295; }
+    function noise(x,y,s){ var xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf),a=hash(xi,yi,s),b=hash(xi+1,yi,s),c=hash(xi,yi+1,s),d=hash(xi+1,yi+1,s); return a+(b-a)*u+(c-a)*v+(a-b-c+d)*u*v; }
+    function fbm(x,y,s){ return noise(x,y,s)*.55+noise(x*2.1,y*2.1,s+7)*.3+noise(x*4.3,y*4.3,s+13)*.15; }
+    document.querySelectorAll('.card').forEach(function (card) {
+      var cv = card.querySelector('.card-art'), seed = +card.dataset.seed;
+      var w = Math.ceil(220 / CELL), h = Math.ceil(138 / CELL);
+      cv.width = w; cv.height = h;
+      var ctx = cv.getContext('2d'), img = ctx.createImageData(w, h);
+      for (var y=0;y<h;y++) for (var x=0;x<w;x++) {
+        var grad = y / h, n = fbm(x/9, y/9, seed);
+        var value = Math.min(1, Math.max(0, grad*.6 + n*.7 - .2));
+        var level = Math.min(2, Math.floor(value*2 + B8[y%8][x%8]/64));
+        var c = PALETTE[level], i = (y*w+x)*4;
+        img.data[i]=c[0]; img.data[i+1]=c[1]; img.data[i+2]=c[2]; img.data[i+3]=255;
+      }
+      ctx.putImageData(img, 0, 0);
+    });
+  })();
+</script>
+</body>
+</html>

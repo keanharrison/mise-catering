@@ -8,7 +8,7 @@ const MAX_FILES = 5
 const HINTS = ['What’s the status of my request?', 'When is my next event?', 'Do I have any drafts in progress?']
 
 
-const toolButton = 'flex size-11 shrink-0 items-center justify-center rounded-full text-foreground transition-colors duration-150 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:text-muted-foreground disabled:hover:bg-transparent md:size-10'
+const toolButton = 'flex size-11 shrink-0 items-center justify-center text-primary-ink transition-colors duration-150 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:text-muted-foreground disabled:hover:bg-transparent md:size-10'
 
 /**
  * The pill-shaped question field used on the Chat page: attach files with +, send with the arrow.
@@ -49,13 +49,13 @@ export function ChatComposer({ value, onChange, onSubmit, autoFocus = false, lab
       {files.length > 0 && (
         <ul aria-label="Attached files" className="absolute inset-x-0 bottom-full mb-2 flex flex-wrap gap-2 px-2">
           {files.map((file, index) => (
-            <li key={`${file.name}-${index}`} className="flex max-w-full items-center gap-1 rounded-full bg-secondary py-1 pl-3 pr-1 text-ui text-foreground">
+            <li key={`${file.name}-${index}`} className="flex max-w-full items-center gap-1 border border-border bg-secondary py-1 pl-3 pr-1 text-ui text-foreground">
               <span className="truncate">{file.name}</span>
               <button
                 type="button"
                 aria-label={`Remove ${file.name}`}
                 onClick={() => setFiles((current) => current.filter((_, i) => i !== index))}
-                className="flex size-6 shrink-0 items-center justify-center rounded-full hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="flex size-6 shrink-0 items-center justify-center hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <X aria-hidden="true" style={{ width: 12, height: 12 }} />
               </button>
@@ -65,7 +65,7 @@ export function ChatComposer({ value, onChange, onSubmit, autoFocus = false, lab
       )}
       <form
         onSubmit={submit}
-        className="flex items-center gap-1 rounded-full bg-background p-2 pl-2.5 shadow-[0_1px_2px_rgb(0_0_0/0.04),inset_0_0_0_1px_var(--border)] transition-shadow duration-150 focus-within:shadow-[0_2px_10px_rgb(0_0_0/0.07),inset_0_0_0_1px_var(--border)]"
+        className="flex items-center gap-1 border border-field-border bg-background p-2 pl-2.5 transition-shadow duration-150 focus-within:shadow-[0_0_0_3px_rgb(255_102_0/0.15)]"
       >
         {attach ? (
           <>
@@ -102,7 +102,7 @@ export function ChatComposer({ value, onChange, onSubmit, autoFocus = false, lab
           aria-label={sendLabel}
           disabled={!canSend}
           data-icon-surface
-          className="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground transition-colors duration-150 hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-[var(--disabled-fill)] disabled:hover:bg-[var(--disabled-fill)] md:size-10"
+          className="flex size-11 shrink-0 items-center justify-center bg-primary text-primary-foreground transition-colors duration-150 hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-[var(--disabled-fill)] disabled:hover:bg-[var(--disabled-fill)] md:size-10"
         >
           <ArrowUp aria-hidden="true" />
         </button>

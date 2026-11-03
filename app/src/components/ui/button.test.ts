@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { buttonVariants } from './button'
 
 describe('button variants', () => {
-  it('makes the primary action black with white text, one size and one radius', () => {
+  it('makes the primary action solid orange with white text, one size and one radius', () => {
     const primary = buttonVariants({})
     expect(primary).toContain('bg-primary')
     expect(primary).toContain('text-primary-foreground')
@@ -15,11 +15,11 @@ describe('button variants', () => {
     expect(buttonVariants({})).toContain('disabled:opacity-100')
   })
 
-  it('keeps secondary actions outlined and neutral', () => {
+  it('keeps secondary actions outlined in orange and filling on hover', () => {
     const outline = buttonVariants({ variant: 'outline' })
-    expect(outline).toContain('border-border')
+    expect(outline).toContain('border-primary')
     expect(outline).toContain('bg-card')
-    expect(outline).not.toContain('bg-primary')
+    expect(outline).not.toMatch(/(^| )bg-primary( |$)/)
   })
 
   it('keeps a visible focus ring on every variant', () => {
