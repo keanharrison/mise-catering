@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 import { Button, buttonVariants } from '../../components/ui/button'
 import { OptionSelect } from '../../components/OptionSelect'
 import { routes } from '../../routes'
+import { mise } from '../../components/mise'
 
 type Row = {
   id: string
@@ -17,11 +18,11 @@ const soon = (what: string) => toast(`${what} isn’t available in this prototyp
 
 /** A control that looks like the real thing but only says it is not built yet. */
 function Preview({ label, aria }: { label: string; aria: string }) {
-  return <Button variant="outline" aria-label={aria} onClick={() => soon(aria)}>{label}</Button>
+  return <Button variant="outline" className={mise.outline} aria-label={aria} onClick={() => soon(aria)}>{label}</Button>
 }
 
 function LinkButton({ to, children }: { to: string; children: ReactNode }) {
-  return <Link to={to} className={buttonVariants({ variant: 'outline' })}>{children}</Link>
+  return <Link to={to} className={`${buttonVariants({ variant: 'outline' })} ${mise.outline}`}>{children}</Link>
 }
 
 function PreviewSelect({ label, options, what }: { label: string; options: string[]; what: string }) {
@@ -79,11 +80,11 @@ const sections: Array<{ id: string; title: string; rows: Row[] }> = [
       { id: 'time-zone', title: 'Time zone', description: 'The time zone used for event times.', control: <PreviewSelect label="Time zone" options={['Central Time (US and Canada)', 'Eastern Time (US and Canada)', 'Mountain Time (US and Canada)', 'Pacific Time (US and Canada)']} what="Changing the time zone" /> },
       { id: 'export', title: 'Download your data', description: 'Request a copy of your requests and settings.', control: <Preview label="Request data export" aria="Requesting a data export" /> },
       { id: 'security', title: 'Security', description: 'Password and two-factor authentication.', control: <Preview label="Manage security" aria="Managing security" /> },
-      { id: 'sign-out', title: 'Sign out', description: 'Sign out of Admin on this device.', control: <Button variant="outline" onClick={() => window.location.assign('/pearl-login.html')}>Sign out</Button> },
+      { id: 'sign-out', title: 'Sign out', description: 'Sign out of Admin on this device.', control: <Button variant="outline" className={mise.outline} onClick={() => window.location.assign('/pearl-login.html')}>Sign out</Button> },
       {
         id: 'delete', tone: 'danger', title: 'Delete workspace',
         description: 'Permanently delete Pearl Island’s workspace and every request in it. This can’t be undone.',
-        control: <Button variant="outline" className="border-destructive/40 text-destructive hover:bg-destructive/10 hover:text-destructive" aria-label="Deleting the workspace" onClick={() => soon('Deleting the workspace')}>Delete workspace</Button>,
+        control: <Button variant="outline" className={`${mise.outline} border-destructive/40 text-destructive hover:bg-destructive/10 hover:text-destructive`} aria-label="Deleting the workspace" onClick={() => soon('Deleting the workspace')}>Delete workspace</Button>,
       },
     ],
   },
@@ -93,21 +94,21 @@ const sections: Array<{ id: string; title: string; rows: Row[] }> = [
 export function AdminSettingsPage() {
   return (
     <section className="mx-auto w-full max-w-4xl px-5 py-6 sm:px-8 sm:py-8" aria-labelledby="settings-title">
-      <header className="mb-6">
-        <h1 id="settings-title" className="type-page-title">Settings</h1>
-        <p className="mt-1 text-body text-muted-foreground">A preview of Pearl Island’s restaurant settings. Changes can’t be saved yet, and no integrations are live.</p>
+      <header className="mb-10">
+        <h1 id="settings-title" className={mise.title}>Settings.</h1>
+        <p className={`mt-3 ${mise.lead}`}>A preview of Pearl Island’s restaurant settings. Changes can’t be saved yet, and no integrations are live.</p>
       </header>
 
-      <div className="grid gap-8">
+      <div className="grid gap-10">
         {sections.map((section) => (
-          <section key={section.id} aria-labelledby={`settings-${section.id}`}>
-            <h2 id={`settings-${section.id}`} className="mb-1 text-ui font-medium text-muted-foreground">{section.title}</h2>
-            <div className="divide-y divide-border border-y border-border">
+          <section key={section.id} aria-labelledby={`settings-${section.id}`} className="border-t border-primary pt-4">
+            <h2 id={`settings-${section.id}`} className={`mb-1 text-foreground ${mise.mono}`}>{section.title}</h2>
+            <div className="divide-y divide-border">
               {section.rows.map((row) => (
                 <div key={row.id} className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 py-4">
                   <div className="min-w-0 flex-1 basis-64">
-                    <h3 className={row.tone === 'danger' ? 'text-body font-medium text-destructive' : 'text-body font-medium text-foreground'}>{row.title}</h3>
-                    <p className="mt-0.5 max-w-[68ch] text-ui text-muted-foreground">{row.description}</p>
+                    <h3 className={row.tone === 'danger' ? 'text-[15px] font-semibold text-destructive' : 'text-[15px] font-semibold text-foreground'}>{row.title}</h3>
+                    <p className="mt-0.5 max-w-[68ch] text-[13px] leading-[1.5] text-muted-foreground">{row.description}</p>
                   </div>
                   {row.control && <div className="shrink-0">{row.control}</div>}
                 </div>

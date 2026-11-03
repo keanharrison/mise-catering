@@ -16,7 +16,7 @@ const rowTitles = ['Business profile', 'Logo', 'Restaurant food image', 'Intro t
 describe('Admin Settings', () => {
   it('groups every requested setting into compact rows under one heading', () => {
     renderAppAt('/staff/settings', <AppRoutes />)
-    expect(screen.getByRole('heading', { level: 1, name: 'Settings' })).toBeTruthy()
+    expect(screen.getByRole('heading', { level: 1, name: 'Settings.' })).toBeTruthy()
     expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual(['Business', 'Ordering page', 'Catering and fulfillment', 'Team and notifications', 'Account'])
     const main = within(document.getElementById('main') as HTMLElement)
     for (const title of rowTitles) expect(main.getByRole('heading', { level: 3, name: title })).toBeTruthy()
@@ -36,6 +36,6 @@ describe('Admin Settings', () => {
   it('keeps customers out', () => {
     localStorage.setItem('pi2go-demo-account', 'customer')
     renderAppAt('/staff/settings', <AppRoutes />)
-    expect(screen.queryByRole('heading', { level: 1, name: 'Settings' })).toBeNull()
+    expect(screen.queryByRole('heading', { level: 1, name: 'Settings.' })).toBeNull()
   })
 })

@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 import { Button } from '../../components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
 import { Check } from '../../components/icons'
+import { mise } from '../../components/mise'
 import { authConfigured, supabase } from '../../lib/supabase'
 import { signOut } from '../../state/auth'
 import { Field, FieldError, FieldGroup, FieldLabel } from '../../components/ui/field'
@@ -97,48 +98,46 @@ function CustomerSettings() {
   ]
 
   const initial = (savedProfile.name.trim()[0] ?? savedProfile.email.trim()[0] ?? '?').toUpperCase()
-  const underline = 'h-10 rounded-none border-0 border-b border-b-foreground/40 bg-transparent px-0 text-lead shadow-none focus-visible:border-b-primary focus-visible:ring-0 dark:bg-transparent'
 
-  return <section className="mx-auto w-full max-w-3xl px-5 py-8 sm:px-8 sm:py-12">
-    <h1 className="sr-only">Account settings</h1>
-    <form onSubmit={save} noValidate className="flex flex-col gap-8 sm:flex-row sm:gap-10">
-      <div aria-hidden="true" className="flex size-28 shrink-0 select-none items-center justify-center self-start rounded-full bg-secondary text-4xl font-medium text-muted-foreground">{initial}</div>
-      <div className="min-w-0 flex-1">
-        <FieldGroup className="max-w-md gap-7">{fields.map(({ key, label, autocomplete, type, optional }) => {
+  return <section className="mx-auto w-full max-w-3xl px-5 py-10 sm:px-8 sm:py-14">
+    <h1 className={mise.title}>Account settings.</h1>
+    <p className={`mt-3 mb-8 ${mise.lead}`}>Your contact details, saved for new requests.</p>
+    <form onSubmit={save} noValidate className="flex flex-col gap-8 sm:flex-row sm:gap-12">
+      <div aria-hidden="true" className="flex size-24 shrink-0 select-none items-center justify-center self-start rounded-full bg-secondary text-3xl font-medium text-muted-foreground">{initial}</div>
+      <div className="min-w-0 max-w-sm flex-1">
+        <FieldGroup className="gap-4">{fields.map(({ key, label, autocomplete, type, optional }) => {
           const id = `profile-${key}`
           const errorId = `${id}-error`
-          return <Field key={key} data-invalid={Boolean(errors[key]) || undefined}>
-            <FieldLabel htmlFor={id} className="text-lead font-normal text-muted-foreground">{label}{optional ? ' (optional)' : ' (required)'}</FieldLabel>
-            <Input id={id} name={key} type={type ?? 'text'} autoComplete={autocomplete} required={!optional} value={profile[key]} aria-invalid={Boolean(errors[key])} aria-describedby={errors[key] ? errorId : undefined} className={underline} onChange={(event) => update(key, event.target.value)} />
-            {errors[key] && <FieldError id={errorId}>{errors[key]}</FieldError>}
+          return <Field key={key} data-invalid={Boolean(errors[key]) || undefined} className="gap-0">
+            <FieldLabel htmlFor={id} className={`${mise.label} font-normal`}>{label}{optional ? ' (optional)' : ' (required)'}</FieldLabel>
+            <Input id={id} name={key} type={type ?? 'text'} autoComplete={autocomplete} required={!optional} value={profile[key]} aria-invalid={Boolean(errors[key])} aria-describedby={errors[key] ? errorId : undefined} className={mise.input} onChange={(event) => update(key, event.target.value)} />
+            {errors[key] && <FieldError id={errorId} className="mt-2">{errors[key]}</FieldError>}
           </Field>
         })}</FieldGroup>
-        {saveError && <Alert variant="destructive" className="mt-6 max-w-md"><AlertTitle>Could not save changes</AlertTitle><AlertDescription>{saveError}</AlertDescription></Alert>}
-        <div className="mt-7 flex items-center gap-5">
-          <Button type="submit" disabled={!dirty || saving}>{saving ? 'Saving…' : 'Save'}</Button>
-          <button type="button" disabled={!dirty || saving} onClick={discard} className="text-body font-medium text-foreground outline-none hover:text-primary-ink focus-visible:underline disabled:cursor-not-allowed disabled:text-muted-foreground">Cancel</button>
-        </div>
-        <p className="mt-5 max-w-md text-ui text-muted-foreground">Saved details fill blank contact fields on new requests. Existing drafts and orders keep their original information.</p>
+        {saveError && <Alert variant="destructive" className="mt-5"><AlertTitle>Could not save changes</AlertTitle><AlertDescription>{saveError}</AlertDescription></Alert>}
+        <Button type="submit" disabled={!dirty || saving} className={`mt-6 w-full ${mise.primary}`}>{saving ? 'Saving…' : 'Save'}</Button>
+        <p className="mt-4 text-center"><button type="button" disabled={!dirty || saving} onClick={discard} className={mise.link}>Cancel</button></p>
+        <p className="mt-5 text-[12px] leading-[1.5] text-muted-foreground">Saved details fill blank contact fields on new requests. Existing drafts and orders keep their original information.</p>
 
-        <hr className="my-10 border-border" />
+        <hr className={`my-10 ${mise.rule}`} />
         <div>
-          <h2 className="text-heading font-semibold">Emails</h2>
-          <p className="mt-1 text-ui text-muted-foreground">We send email about your requests to your primary email.</p>
-          <div className="mt-5 flex flex-wrap items-center gap-3 border border-border px-4 py-4">
-            <span className="text-lead">{signInEmail ?? (savedProfile.email || 'No email saved yet')}</span>
-            <span className="bg-foreground px-2 py-0.5 text-caption font-medium text-background">Primary</span>
-            {verified && <span className="inline-flex items-center gap-1 text-ui text-success"><Check aria-hidden="true" style={{ width: 14, height: 14 }} />Verified</span>}
+          <h2 className="text-[16px] font-semibold tracking-[-0.01em]">Emails</h2>
+          <p className={`mt-1 mb-4 text-[14px] leading-[1.55] text-muted-foreground`}>We send email about your requests to your primary email.</p>
+          <div className="flex flex-wrap items-center gap-3 border border-primary px-3.5 py-3">
+            <span className="text-[15px]">{signInEmail ?? (savedProfile.email || 'No email saved yet')}</span>
+            <span className={`bg-foreground px-2 py-0.5 text-background ${mise.mono}`}>Primary</span>
+            {verified && <span className={`inline-flex items-center gap-1 text-success ${mise.mono}`}><Check aria-hidden="true" style={{ width: 14, height: 14 }} />Verified</span>}
           </div>
         </div>
 
         {authConfigured && <>
-          <hr className="my-10 border-border" />
+          <hr className={`my-10 ${mise.rule}`} />
           <div>
-            <h2 className="text-heading font-semibold">Sessions</h2>
-            <p className="mt-1 max-w-lg text-ui text-muted-foreground">Sign out on every other browser and device. You stay signed in here.</p>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <Button type="button" variant="outline" onClick={() => void signOutOthers()}>Sign out other devices</Button>
-              <Button type="button" variant="outline" onClick={() => void signOut()}>Sign out</Button>
+            <h2 className="text-[16px] font-semibold tracking-[-0.01em]">Sessions</h2>
+            <p className={`mt-1 mb-4 text-[14px] leading-[1.55] text-muted-foreground`}>Sign out on every other browser and device. You stay signed in here.</p>
+            <div className="grid gap-3">
+              <Button type="button" variant="outline" className={mise.outline} onClick={() => void signOutOthers()}>Sign out other devices</Button>
+              <Button type="button" variant="outline" className={mise.outline} onClick={() => void signOut()}>Sign out</Button>
             </div>
           </div>
         </>}
