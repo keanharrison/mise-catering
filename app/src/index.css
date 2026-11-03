@@ -401,3 +401,14 @@ input::placeholder,
 textarea::placeholder,
 [data-slot='select-trigger'][data-placeholder],
 [data-slot='select-value'][data-placeholder] { color: var(--placeholder-color); opacity: 1; }
+
+/* Order chat dock: soft warm gray at the top, deepening to the brand orange at the bottom. Follows the accent chosen in the Design panel. */
+.chat-dock {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--primary) 3%, #f6f4f2) 0%,
+    color-mix(in srgb, var(--primary) 12%, #fff) 38%,
+    color-mix(in srgb, var(--primary) 45%, #fff) 72%,
+    var(--primary) 100%
+  );
+}

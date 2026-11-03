@@ -6,6 +6,7 @@ import { SiteHeader } from './SiteHeader'
 import { SidebarInset, SidebarProvider } from './ui/sidebar'
 import { TooltipProvider } from './ui/tooltip'
 import { Toaster } from './ui/sonner'
+import { ChatDock } from './chat/ChatDock'
 import { useDemoAccount } from '../state/demoAccount'
 import { stages, type Stage } from '../views/customer/journey'
 
@@ -42,15 +43,20 @@ export function AppShell({ children }: { children: ReactNode }) {
         <AppSidebar />
         <SidebarInset className="min-h-svh min-w-0 md:h-svh md:min-h-0 md:overflow-y-auto">
           <SiteHeader />
-          {showJourney && (
-            <div className="border-b border-border bg-background px-5 py-4 sm:px-8">
-              <div className="mx-auto w-full max-w-3xl">
-                <JourneyNav active={activeStage as Stage} />
+          <div className={showJourney ? 'flex items-start' : undefined}>
+            <div className="min-w-0 flex-1">
+              {showJourney && (
+                <div className="border-b border-border bg-background px-5 py-4 sm:px-8">
+                  <div className="mx-auto w-full max-w-3xl">
+                    <JourneyNav active={activeStage as Stage} />
+                  </div>
+                </div>
+              )}
+              <div id="main" tabIndex={-1} className="min-h-[calc(100svh-3.25rem)] min-w-0 outline-none">
+                {children}
               </div>
             </div>
-          )}
-          <div id="main" tabIndex={-1} className="min-h-[calc(100svh-3.25rem)] min-w-0 outline-none">
-            {children}
+            {showJourney && <ChatDock stage={activeStage as Stage} />}
           </div>
         </SidebarInset>
       </SidebarProvider>
