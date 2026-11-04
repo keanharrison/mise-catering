@@ -1,0 +1,41 @@
+/* Design panel: a fixed side key for trying colors. Lives outside the frame so it never changes the layout. */
+.dp-toggle {
+  position: fixed; left: 0; bottom: 16px; z-index: 1001;
+  padding: 8px 12px; border: 1px solid #111; border-left: 0; background: #fff; color: #111;
+  font: 400 12px 'JetBrains Mono', ui-monospace, monospace; cursor: pointer;
+}
+.dp {
+  position: fixed; top: 0; bottom: 0; left: 0; z-index: 1000; width: 272px;
+  padding: 20px 18px 56px; overflow-y: auto;
+  background: #fff; color: #111; border-right: 1px solid #111;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  transition: transform 0.2s ease;
+}
+.dp[data-open='false'] { transform: translateX(-100%); }
+.dp-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 20px; }
+.dp h2 { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -0.02em; }
+.dp h3 { margin: 22px 0 10px; font: 400 11px 'JetBrains Mono', ui-monospace, monospace; letter-spacing: 0.04em; text-transform: uppercase; color: #6b6b6b; }
+.dp-swatches { display: flex; flex-wrap: wrap; gap: 8px; }
+.dp-swatch { width: 28px; height: 28px; padding: 0; border: 1px solid #111; border-radius: 0; cursor: pointer; }
+.dp-swatch[data-active='true'] { outline: 2px solid #111; outline-offset: 2px; }
+.dp-row { display: grid; gap: 6px; margin-bottom: 12px; }
+.dp-label { font-size: 12px; }
+.dp-label em { font-style: normal; color: #6b6b6b; margin-left: 4px; }
+.dp-controls { display: flex; align-items: center; gap: 8px; }
+.dp-controls input[type='color'] { width: 36px; height: 32px; padding: 0; border: 1px solid #111; border-radius: 0; background: none; cursor: pointer; }
+.dp-hex { flex: 1; min-width: 0; padding: 6px 8px; border: 1px solid #111; border-radius: 0; font: 400 12px 'JetBrains Mono', ui-monospace, monospace; }
+.dp-link { padding: 0; border: 0; background: none; font: 400 12px 'JetBrains Mono', ui-monospace, monospace; color: #111; text-decoration: underline; cursor: pointer; }
+.dp input[type='range'] { width: 100%; accent-color: #111; }
+.dp-chips { display: flex; gap: 8px; }
+.dp-chips button { flex: 1; padding: 7px 0; border: 1px solid #111; border-radius: 0; background: #fff; font: 400 12px 'JetBrains Mono', ui-monospace, monospace; cursor: pointer; }
+.dp-chips button:hover, .dp-toggle:hover { background: #f3f3f3; }
+.dp button:focus-visible, .dp-toggle:focus-visible, .dp input:focus-visible { outline: 2px solid #111; outline-offset: 2px; }
+.dp-current { font-style: normal; text-transform: none; letter-spacing: 0; color: #111; margin-left: 6px; }
+@media (max-width: 720px) { .dp { width: 100%; } }
+
+.dp-seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.dp-seg button { flex: 1 1 auto; padding: 6px 8px; border: 1px solid #111; border-radius: 0; background: #fff; color: #111; font: 400 12px 'JetBrains Mono', ui-monospace, monospace; cursor: pointer; }
+.dp-seg button[aria-pressed='true'] { background: #111; color: #fff; }
+.dp-swatches-group { margin: 0 0 6px; font: 400 11px 'JetBrains Mono', ui-monospace, monospace; color: #6b6b6b; }
+/* In the product the panel sits over the sidebar; keep it above the app chrome. */
+.dp[data-surface='product'] { box-shadow: 0 0 40px rgb(0 0 0 / 0.12); }

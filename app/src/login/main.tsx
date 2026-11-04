@@ -3,7 +3,8 @@ import { createRoot } from 'react-dom/client'
 import { supabase } from '../lib/supabase'
 import { LOGIN_URL, fetchProfile, homeFor, isStaffRole, requestDemo, saveProfileLocally, sendPasswordReset, setPassword, signIn, signUp } from '../state/auth'
 import { DitherPanel } from './DitherPanel'
-import { DesignPanel } from './DesignPanel'
+import { DesignPanel } from '../components/design/DesignPanel'
+import '../components/design/design-panel.css'
 import { resolve, useDesignTheme } from './theme'
 import '@fontsource/space-grotesk/400.css'
 import '@fontsource/space-grotesk/500.css'
@@ -123,7 +124,7 @@ function LoginPage() {
       className="mise-page"
       style={{ '--line': r.accent, '--line-hover': r.hover, '--on-accent': r.onAccent, '--line-text': r.accentText, '--ink': theme.ink, '--paper': theme.paper } as React.CSSProperties}
     >
-      <DesignPanel theme={theme} onChange={patchTheme} onReset={resetTheme} />
+      <DesignPanel theme={theme} onChange={patchTheme} onReset={resetTheme} surface="login" />
       <div className="mise-sides" aria-hidden="true">
         <DitherPanel seed={1018} colors={dither} cell={theme.cell} className="mise-side mise-side-left" />
         <DitherPanel seed={1015} colors={dither} cell={theme.cell} className="mise-side mise-side-right" />

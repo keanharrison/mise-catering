@@ -1,5 +1,8 @@
 @import '@fontsource-variable/space-grotesk';
 @import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/nunito';
+@import '@fontsource-variable/dm-sans';
 @import 'tailwindcss';
 @import './components/menu.css';
 @import "tw-animate-css";
@@ -402,13 +405,11 @@ textarea::placeholder,
 [data-slot='select-trigger'][data-placeholder],
 [data-slot='select-value'][data-placeholder] { color: var(--placeholder-color); opacity: 1; }
 
-/* Order chat dock: soft warm gray at the top, deepening to the brand orange at the bottom. Follows the accent chosen in the Design panel. */
+/* Order chat dock. The background comes from the Design panel (--chat-bg); the fallback is the default orange gradient. */
 .chat-dock {
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--primary) 3%, #f6f4f2) 0%,
-    color-mix(in srgb, var(--primary) 12%, #fff) 38%,
-    color-mix(in srgb, var(--primary) 45%, #fff) 72%,
-    var(--primary) 100%
-  );
+  background: var(--chat-bg, linear-gradient(180deg, #f6f4f2 0%, #ffeee3 38%, #ffc9a3 72%, #ff6600 100%));
 }
+
+/* Design panel options that need a stylesheet rule rather than a variable. */
+[data-buttons='pill'] [data-slot='button'] { border-radius: 9999px; }
+[data-fields='pill'] :is([data-slot='input'], [data-slot='select-trigger']) { border-radius: 9999px; padding-inline: 1rem; }
