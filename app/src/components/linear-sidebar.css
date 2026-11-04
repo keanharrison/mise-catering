@@ -6,7 +6,7 @@
   --linear-nav-ink: #6b6b6b;
   --linear-nav-muted: #6b6b6b;
   --linear-nav-strong: #171717;
-  --linear-nav-active: #fff1e8;
+  --linear-nav-active: color-mix(in srgb, var(--primary) 12%, var(--background));
   --linear-nav-hover: rgb(0 0 0 / 0.04);
   --linear-nav-border: #ff6600;
   font-family: var(--font-sans);

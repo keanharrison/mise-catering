@@ -52,15 +52,15 @@
     flex: none;
     width: 3rem;
     height: 3rem;
-    border-radius: 1rem;
+    border-radius: calc(var(--radius) * 1.6);
     border: 1px solid var(--border);
     background: var(--background);
     color: var(--foreground);
     box-shadow: 0 1px 2px rgb(0 0 0 / 0.05), 0 6px 14px -4px rgb(0 0 0 / 0.08);
   }
 
-  /* With a tone, the tile is a solid color with a white glyph, one color per destination. */
-  .floating-tile[data-tone] { border-color: transparent; background: var(--tile-color); color: #fff; }
+  /* With a tone, the tile is the accent with a glyph that stays readable on it. Every tone follows the Design panel accent. */
+  .floating-tile[data-tone] { border-color: transparent; background: var(--tile-color); color: var(--primary-foreground); }
   .floating-tile[data-tone='indigo'], .soft-tile[data-tone='indigo'] { --tile-color: var(--tile-indigo); }
   .floating-tile[data-tone='violet'], .soft-tile[data-tone='violet'] { --tile-color: var(--tile-violet); }
   .floating-tile[data-tone='teal'], .soft-tile[data-tone='teal'] { --tile-color: var(--tile-teal); }
@@ -68,7 +68,7 @@
   .floating-tile[data-tone='slate'], .soft-tile[data-tone='slate'] { --tile-color: var(--tile-slate); }
 
   /* Compact variant for dense Admin screens: a 30px tile around a 16px glyph. */
-  .floating-tile[data-size='sm'] { width: 1.875rem; height: 1.875rem; border-radius: 0.5rem; box-shadow: 0 1px 2px rgb(0 0 0 / 0.08); }
+  .floating-tile[data-size='sm'] { width: 1.875rem; height: 1.875rem; border-radius: calc(var(--radius) * 0.8); box-shadow: 0 1px 2px rgb(0 0 0 / 0.08); }
   .floating-tile[data-size='sm'] svg { width: 1rem; height: 1rem; }
 
   /* Card-heading icon: a small tinted tile with a colored glyph. Quieter than the solid floating tile. */
@@ -79,9 +79,9 @@
     flex: none;
     width: 2rem;
     height: 2rem;
-    border-radius: 0.625rem;
-    background: color-mix(in srgb, var(--tile-color, var(--tile-slate)) 12%, #fff);
-    color: var(--tile-color, var(--tile-slate));
+    border-radius: var(--radius);
+    background: color-mix(in srgb, var(--tile-color, var(--tile-slate)) 12%, var(--background));
+    color: var(--primary-ink);
   }
 
   /* Feature card: a hairline border that drifts from indigo to sky at low strength, over the normal white card. */
@@ -148,7 +148,7 @@
     margin: 0;
     background: var(--background);
     color: var(--foreground);
-    font-family: 'Inter Variable', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-sans);
     font-size: 13px;
     font-weight: 400;
     line-height: 20px;
@@ -252,7 +252,7 @@
   --primary-ink: #b84a00;
   --link: #b84a00;
   --link-hover: #8f3a00;
-  --selection: rgb(255 102 0 / 0.22);
+  --selection: color-mix(in srgb, var(--primary) 22%, transparent);
   --secondary: #f5f5f5;
   --secondary-foreground: #0f0f10;
   --muted: #f5f5f5;
@@ -272,12 +272,12 @@
   --field-border: #ff6600;
   /* Fill for a disabled primary action (Continue, Save changes, Send). */
   --disabled-fill: #c3c3c3;
-  /* Icon tiles are one near-black so the orange accent stays the only brand color. Icon tiles inside pages (never in the sidebar). White glyphs on each pass 4.8:1. Red, amber, green and blue stay reserved for status. */
-  --tile-indigo: #171717;
-  --tile-violet: #171717;
-  --tile-teal: #171717;
-  --tile-sky: #171717;
-  --tile-slate: #171717;
+  /* Icon tiles and chart bars all take the accent, so one color change covers them. Icon tiles inside pages (never in the sidebar). White glyphs on each pass 4.8:1. Red, amber, green and blue stay reserved for status. */
+  --tile-indigo: var(--primary);
+  --tile-violet: var(--primary);
+  --tile-teal: var(--primary);
+  --tile-sky: var(--primary);
+  --tile-slate: var(--primary);
   --ring: #ff6600;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
