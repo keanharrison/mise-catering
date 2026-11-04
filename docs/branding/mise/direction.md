@@ -28,3 +28,7 @@ Mise builds bespoke software for restaurants, aimed at acute operational and adm
 - Whether the product keeps black primary buttons or moves to orange.
 - How much of the reference's monospace and halftone texture carries into the product versus staying on the landing page.
 - How Pearl Island's own brand (`docs/branding/pearl-island/`) coexists with Mise branding, since `soul.md` says customer-facing pages carry the restaurant's brand.
+
+## Product default (2026-11-03)
+
+The product and sign-in page now start from the configuration chosen in the Design panel: Ocean blue accent (`#2563eb`), 24px corners, pill fields, system font, soft lines, pill gradient order chat. Mise orange remains a preset (and the landing page brand). Defaults live in `DEFAULT_THEME` in `app/src/lib/designTheme.ts`; each restaurant will override colors at onboarding.

@@ -29,9 +29,10 @@ export type Theme = {
   fieldBorder: 'accent' | 'neutral'
 }
 
+/** The look everyone starts from, and what Reset returns to. Set from the configuration chosen in the Design panel on 2026-11-03. */
 export const DEFAULT_THEME: Theme = {
-  accent: '#ff6600', hover: null, mid: null, ink: '#111111', paper: '#ffffff', cell: 5,
-  radius: 0, buttons: 'match', fields: 'match', font: 'space',
+  accent: '#2563eb', hover: null, mid: null, ink: '#111111', paper: '#ffffff', cell: 5,
+  radius: 24, buttons: 'match', fields: 'pill', font: 'system',
   chatShape: 'pill', chatStyle: 'gradient', chatIntensity: 100, lines: 'soft', fieldBorder: 'accent',
 }
 

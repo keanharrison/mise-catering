@@ -2,8 +2,9 @@ import { describe, expect, it } from 'vitest'
 import { DEFAULT_THEME, chatBackground, contrast, themeVariables } from './designTheme'
 
 describe('design theme', () => {
-  it('turns the radius slider into rem and keeps the default sharp', () => {
-    expect(themeVariables(DEFAULT_THEME)['--radius']).toBe('0rem')
+  it('turns the radius slider into rem', () => {
+    expect(themeVariables(DEFAULT_THEME)['--radius']).toBe('1.5rem')
+    expect(themeVariables({ ...DEFAULT_THEME, radius: 0 })['--radius']).toBe('0rem')
     expect(themeVariables({ ...DEFAULT_THEME, radius: 16 })['--radius']).toBe('1rem')
   })
 
@@ -13,7 +14,7 @@ describe('design theme', () => {
   })
 
   it('ends the chat gradient at the accent at full depth and at the page color at zero depth', () => {
-    expect(chatBackground({ ...DEFAULT_THEME, chatIntensity: 100 })).toContain('#ff6600 100%')
+    expect(chatBackground({ ...DEFAULT_THEME, chatIntensity: 100 })).toContain(`${DEFAULT_THEME.accent} 100%`)
     expect(chatBackground({ ...DEFAULT_THEME, chatIntensity: 0 })).toContain('#ffffff 100%')
     expect(chatBackground({ ...DEFAULT_THEME, chatStyle: 'plain' })).toBe('#ffffff')
   })
