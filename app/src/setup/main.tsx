@@ -1,11 +1,9 @@
 import { StrictMode, useEffect, useMemo, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import { createRoot } from 'react-dom/client'
-import { applyTheme, readStoredTheme } from '../lib/designTheme'
 import { allQuestions, sections } from './questions'
 import { MAX_FILES, MAX_FILE_BYTES, type SubmittedFile } from './submit'
 import './setup.css'
 
-applyTheme(readStoredTheme())
 
 const DRAFT_KEY = 'mise-setup-draft'
 type Draft = { name: string; email: string; role: string; answers: Record<string, string> }

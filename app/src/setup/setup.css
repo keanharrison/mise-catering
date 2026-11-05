@@ -1,5 +1,5 @@
-/* Document-style setup page: one calm column, large readable text, the product's accent for actions. Separate from the app. */
-:root { color-scheme: light; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; }
+/* Document-style setup page: one calm column, large readable text. Fully standalone: it shares no code, styles or theme with the catering product. */
+:root { color-scheme: light; --primary: #2563eb; --primary-hover: #1e4fbc; --primary-ink: #1d4ed8; --primary-foreground: #fff; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; }
 * { box-sizing: border-box; }
 body { margin: 0; background: #fff; color: #111; }
 ::selection { background: color-mix(in srgb, var(--primary, #2563eb) 25%, transparent); }
