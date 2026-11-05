@@ -6,13 +6,13 @@ const good = { name: 'Sober', email: 'sober@example.com', answers: { q1: 'Yes, c
 const env = { RESEND_API_KEY: 'key', SETUP_TO_EMAIL: 'team@example.com' }
 
 describe('setup questions', () => {
-  it('has 27 numbered questions and five upload questions', () => {
-    expect(allQuestions).toHaveLength(27)
-    expect(allQuestions.filter((q) => q.files).map((q) => q.id)).toEqual(['q2', 'q14', 'q18', 'q25', 'q27'])
+  it('has 36 numbered questions and nine upload questions', () => {
+    expect(allQuestions).toHaveLength(36)
+    expect(allQuestions.filter((q) => q.files).map((q) => q.id)).toEqual(['q2', 'q3', 'q18', 'q19', 'q22', 'q24', 'q26', 'q33', 'q36'])
   })
 
   it('offers a checklist only on the knowledge question, and no role field is asked', () => {
-    expect(allQuestions.filter((q) => q.options).map((q) => q.id)).toEqual(['q27'])
+    expect(allQuestions.filter((q) => q.options).map((q) => q.id)).toEqual(['q36'])
   })
 })
 
@@ -25,11 +25,11 @@ describe('setup submission', () => {
 
   it('rejects files over the size limit', () => {
     const big = 'A'.repeat(4_200_000)
-    expect(validate({ ...good, files: [{ questionId: 'q18', filename: 'orders.csv', contentBase64: big }] }).ok).toBe(false)
+    expect(validate({ ...good, files: [{ questionId: 'q26', filename: 'orders.csv', contentBase64: big }] }).ok).toBe(false)
   })
 
   it('lists every question in the email, marks blanks, and attaches files', () => {
-    const checked = validate({ ...good, files: [{ questionId: 'q18', filename: 'orders.csv', contentBase64: 'YQ==' }] })
+    const checked = validate({ ...good, files: [{ questionId: 'q26', filename: 'orders.csv', contentBase64: 'YQ==' }] })
     if (!checked.ok) throw new Error(checked.message)
     const email = buildEmail(checked.submission)
     expect(email.text).toContain('1. We’re building from your January 2026 catering menu PDF')
@@ -37,7 +37,7 @@ describe('setup submission', () => {
     expect(email.text).toContain('(no answer)')
     expect(email.text).toContain('Files: orders.csv')
     expect(email.attachments).toEqual([{ filename: 'orders.csv', content: 'YQ==' }])
-    expect(email.subject).toContain('1/27')
+    expect(email.subject).toContain('1/36')
   })
 
   it('sends through Resend with a reply-to and ignores bots', async () => {

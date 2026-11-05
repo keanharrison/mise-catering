@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
-// Standalone dithered orange tiles for the sides of the setup page (no product code is shared).
-const PALETTE: Array<[number, number, number]> = [[255, 102, 0], [255, 185, 143], [255, 255, 255]]
+// Standalone dithered Pearl Island turquoise tiles for the sides of the setup page (no product code is shared).
+const PALETTE: Array<[number, number, number]> = [[0, 161, 202], [140, 213, 231], [255, 255, 255]]
 const CELL = 5
 
 function bayer(n: number): number[][] {

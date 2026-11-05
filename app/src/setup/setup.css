@@ -1,5 +1,5 @@
 /* Document-style setup page: one calm column, large readable text. Fully standalone: it shares no code, styles or theme with the catering product. */
-:root { color-scheme: light; --primary: #ff6600; --primary-hover: #cc5200; --primary-ink: #b84a00; --primary-foreground: #fff; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; }
+:root { color-scheme: light; --primary: #00708d; --primary-hover: #005b73; --primary-ink: #00708d; --primary-foreground: #fdfdfd; --brand: #00a1ca; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; }
 * { box-sizing: border-box; }
 body { margin: 0; background: #fff; color: #111; }
 ::selection { background: color-mix(in srgb, var(--primary) 25%, transparent); }
@@ -10,14 +10,14 @@ body { margin: 0; background: #fff; color: #111; }
 .doc-side-left { left: 0; }
 .doc-side-right { right: 0; }
 
-/* One white sheet in a thin orange frame, floating over the tiles. */
-.doc { position: relative; z-index: 1; max-width: 46rem; min-height: 100vh; margin: 0 auto; padding: 3.5rem 2.25rem 5rem; background: #fff; border: 1px solid var(--primary); border-top: 0; border-bottom: 0; }
+/* One white sheet in a thin turquoise frame, floating over the tiles. */
+.doc { position: relative; z-index: 1; max-width: 46rem; min-height: 100vh; margin: 0 auto; padding: 3.5rem 2.25rem 5rem; background: #fff; border: 1px solid var(--brand); border-top: 0; border-bottom: 0; }
 @media (max-width: 720px) { .doc { padding: 2.25rem 1.25rem 4rem; border-left: 0; border-right: 0; } }
 .doc-mark { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; margin: 0 0 1.5rem; background: var(--primary); color: var(--primary-foreground, #fff); font-weight: 700; border-radius: 0.5rem; }
 .doc h1 { margin: 0 0 0.75rem; font-size: 2rem; line-height: 1.15; letter-spacing: -0.02em; font-weight: 650; }
 .doc-lead { margin: 0 0 2.5rem; font-size: 1.0625rem; line-height: 1.6; color: #333; max-width: 60ch; }
 .doc section { margin: 0 0 2.75rem; }
-.doc h2 { margin: 0 0 1.25rem; padding-top: 1.25rem; border-top: 1px solid color-mix(in srgb, var(--primary) 35%, #fff); font-size: 1.25rem; font-weight: 650; letter-spacing: -0.01em; }
+.doc h2 { margin: 0 0 1.25rem; padding-top: 1.25rem; border-top: 1px solid color-mix(in srgb, var(--brand) 40%, #fff); font-size: 1.25rem; font-weight: 650; letter-spacing: -0.01em; }
 
 .doc label { display: block; font-size: 0.9375rem; line-height: 1.45; }
 .doc-q { margin: 0 0 1.5rem; }
@@ -57,3 +57,21 @@ body { margin: 0; background: #fff; color: #111; }
 .doc-check { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9375rem; font-weight: 400; cursor: pointer; }
 .doc-check input { width: 1.05rem; height: 1.05rem; margin: 0; accent-color: var(--primary); }
 .doc-hint { font-size: 0.8125rem; color: #555; }
+
+/* Checklist: the box sits at the left, right next to its words. */
+.doc .doc-check { display: flex; align-items: center; justify-content: flex-start; gap: 0.6rem; margin: 0; }
+.doc .doc-check input[type='checkbox'] { flex: none; width: 1.1rem; height: 1.1rem; margin: 0; padding: 0; border-radius: 0.25rem; box-shadow: none; accent-color: var(--primary); }
+
+/* Intro: the logo sits alone in the middle, then dissolves into the form. */
+.doc-intro { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; background: #fff; animation: intro-out 1.8s ease 1.7s forwards; }
+.doc-intro img { width: min(62vw, 400px); height: auto; animation: logo-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.doc, .doc-sides { animation: doc-in 1.8s ease 1.9s both; }
+@keyframes logo-in { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: none; } }
+@keyframes intro-out { to { opacity: 0; visibility: hidden; } }
+@keyframes doc-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.skip-intro .doc-intro { display: none; }
+.skip-intro .doc, .skip-intro .doc-sides { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  .doc-intro { display: none; }
+  .doc, .doc-sides { animation: none; }
+}

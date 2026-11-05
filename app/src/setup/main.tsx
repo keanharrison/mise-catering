@@ -1,10 +1,18 @@
 import { StrictMode, useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import { createRoot } from 'react-dom/client'
+import logo from './assets/pearl-island-logo.png'
 import { Backdrop } from './Backdrop'
 import { allQuestions, sections } from './questions'
 import { MAX_FILES, MAX_FILE_BYTES, type SubmittedFile } from './submit'
 import './setup.css'
 
+
+// The logo intro plays once per browser session; a refresh goes straight to the form.
+const INTRO_KEY = 'mise-setup-intro-seen'
+try {
+  if (sessionStorage.getItem(INTRO_KEY)) document.documentElement.classList.add('skip-intro')
+  else sessionStorage.setItem(INTRO_KEY, '1')
+} catch { /* storage unavailable: just play the intro */ }
 
 const DRAFT_KEY = 'mise-setup-draft-v2'
 type Draft = { name: string; email: string; answers: Record<string, string>; checks: Record<string, string[]> }
@@ -110,6 +118,7 @@ function SetupPage() {
 
   return (
     <>
+      <div className="doc-intro" aria-hidden="true"><img src={logo} alt="" /></div>
       <Backdrop />
       <main className="doc">
         <h1>Pearl Island Catering Setup</h1>
