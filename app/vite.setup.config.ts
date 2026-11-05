@@ -10,7 +10,7 @@ function forwardRoot(): Plugin {
       this.emitFile({
         type: 'asset',
         fileName: 'index.html',
-        source: '<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=/setup.html"><title>Pearl Island catering setup</title><script>location.replace("/setup.html")</script>',
+        source: '<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=/setup.html"><title>Pearl Island Catering Setup</title><script>location.replace("/setup.html")</script>',
       })
     },
   }

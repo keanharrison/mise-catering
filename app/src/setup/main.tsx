@@ -1,16 +1,17 @@
-import { StrictMode, useEffect, useMemo, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
+import { StrictMode, useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import { createRoot } from 'react-dom/client'
+import { Backdrop } from './Backdrop'
 import { allQuestions, sections } from './questions'
 import { MAX_FILES, MAX_FILE_BYTES, type SubmittedFile } from './submit'
 import './setup.css'
 
 
-const DRAFT_KEY = 'mise-setup-draft'
-type Draft = { name: string; email: string; role: string; answers: Record<string, string> }
+const DRAFT_KEY = 'mise-setup-draft-v2'
+type Draft = { name: string; email: string; answers: Record<string, string>; checks: Record<string, string[]> }
 type Attached = SubmittedFile & { size: number }
 
 function loadDraft(): Draft {
-  try { return { name: '', email: '', role: '', answers: {}, ...JSON.parse(localStorage.getItem(DRAFT_KEY) ?? '{}') } } catch { return { name: '', email: '', role: '', answers: {} } }
+  try { return { name: '', email: '', answers: {}, checks: {}, ...JSON.parse(localStorage.getItem(DRAFT_KEY) ?? '{}') } } catch { return { name: '', email: '', answers: {}, checks: {} } }
 }
 
 const readBase64 = (file: File) => new Promise<string>((resolve, reject) => {
@@ -32,8 +33,19 @@ function SetupPage() {
 
   useEffect(() => { localStorage.setItem(DRAFT_KEY, JSON.stringify(draft)) }, [draft])
 
-  const answered = useMemo(() => allQuestions.filter((q) => draft.answers[q.id]?.trim() || files.some((f) => f.questionId === q.id)).length, [draft.answers, files])
   const used = files.reduce((sum, f) => sum + f.size, 0)
+
+  /** Answers as sent: a checklist's ticked items go in front of the written note. */
+  const mergedAnswers = () => Object.fromEntries(allQuestions.map((question) => {
+    const checked = draft.checks[question.id] ?? []
+    const note = draft.answers[question.id]?.trim() ?? ''
+    return [question.id, [checked.length ? `Already have: ${checked.join(', ')}.` : '', note].filter(Boolean).join('\n\n')]
+  }))
+
+  const toggleCheck = (id: string, option: string) => setDraft((d) => {
+    const current = d.checks[id] ?? []
+    return { ...d, checks: { ...d.checks, [id]: current.includes(option) ? current.filter((o) => o !== option) : [...current, option] } }
+  })
 
   const setAnswer = (id: string, value: string) => setDraft((d) => ({ ...d, answers: { ...d.answers, [id]: value } }))
 
@@ -61,7 +73,7 @@ function SetupPage() {
       const response = await fetch('/api/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...draft, files: files.map(({ questionId, filename, contentBase64 }) => ({ questionId, filename, contentBase64 })), website: honeypot }),
+        body: JSON.stringify({ name: draft.name, email: draft.email, answers: mergedAnswers(), files: files.map(({ questionId, filename, contentBase64 }) => ({ questionId, filename, contentBase64 })), website: honeypot }),
       })
       const result = (await response.json().catch(() => ({}))) as { ok?: boolean; message?: string }
       if (!response.ok || !result.ok) throw new Error(result.message || 'Something went wrong. Please try again.')
@@ -75,7 +87,8 @@ function SetupPage() {
   }
 
   function downloadCopy() {
-    const text = [`Pearl Island catering setup`, `${draft.name} <${draft.email}>`, '', ...allQuestions.flatMap((q, i) => [`${i + 1}. ${q.text}`, draft.answers[q.id]?.trim() || '(no answer)', ''])].join('\n')
+    const merged = mergedAnswers()
+    const text = [`Pearl Island Catering Setup`, `${draft.name} <${draft.email}>`, '', ...allQuestions.flatMap((q, i) => [`${i + 1}. ${q.text}`, merged[q.id] || '(no answer)', ''])].join('\n')
     const link = document.createElement('a')
     link.href = URL.createObjectURL(new Blob([text], { type: 'text/plain' }))
     link.download = 'pearl-island-setup-answers.txt'
@@ -85,32 +98,29 @@ function SetupPage() {
 
   if (status === 'sent') {
     return (
-      <main className="doc">
-        <p className="doc-mark" aria-hidden="true">M</p>
-        <h1>Thank you.</h1>
-        <p className="doc-lead">We received your answers{files.length ? ` and ${files.length} file${files.length === 1 ? '' : 's'}` : ''}. We’ll review them and follow up with anything we still need. You can close this page.</p>
-      </main>
+      <>
+        <Backdrop />
+        <main className="doc">
+          <h1>Thank You</h1>
+          <p className="doc-lead">We received your answers{files.length ? ` and ${files.length} file${files.length === 1 ? '' : 's'}` : ''}. We’ll review them and follow up with anything we still need. You can close this page.</p>
+        </main>
+      </>
     )
   }
 
   return (
     <>
-      <div className="doc-progress" role="status" aria-live="polite">
-        <span>{answered} of {allQuestions.length} answered</span>
-        <span className="doc-progress-bar" aria-hidden="true"><span style={{ width: `${(answered / allQuestions.length) * 100}%` }} /></span>
-      </div>
+      <Backdrop />
       <main className="doc">
-        <p className="doc-mark" aria-hidden="true">M</p>
-        <h1>Pearl Island catering setup</h1>
-        <p className="doc-lead">These are the details we need to finish your catering platform. Answer what you can in your own words, and skip anything you’re unsure about; we’ll follow up. Your answers save in this browser as you type, so you can close the page and come back.</p>
+        <h1>Pearl Island Catering Setup</h1>
+        <p className="doc-lead">Hey Sober, Kean and Diego here. We’re almost done with your website and catering platform. There are just a few more details we need to finish your catering platform. Answer what you can to the best of your ability, and skip anything you’re unsure about; we’ll follow up. Your answers save in this browser as you type, so you can close the page and come back. You can download a copy of your responses at the end. We’ll also get an email of your responses.</p>
 
         <form onSubmit={submit} noValidate>
           <section id="who" aria-labelledby="who-title">
-            <h2 id="who-title">About you</h2>
+            <h2 id="who-title">About You</h2>
             <div className="doc-grid">
               <label>Your name<input value={draft.name} autoComplete="name" onChange={(e) => setDraft({ ...draft, name: e.target.value })} /></label>
               <label>Your email<input type="email" value={draft.email} autoComplete="email" onChange={(e) => setDraft({ ...draft, email: e.target.value })} /></label>
-              <label className="doc-wide">Your role (optional)<input value={draft.role} autoComplete="organization-title" onChange={(e) => setDraft({ ...draft, role: e.target.value })} /></label>
             </div>
           </section>
 
@@ -122,11 +132,22 @@ function SetupPage() {
                 return (
                   <div className="doc-q" key={q.id}>
                     <label htmlFor={q.id}><span className="doc-n">{q.id.slice(1)}</span>{q.text}</label>
-                    <textarea id={q.id} rows={2} value={draft.answers[q.id] ?? ''} onChange={(e) => setAnswer(q.id, e.target.value)} placeholder="Your answer" />
+                    {q.options && (
+                      <div className="doc-checks" role="group" aria-label="Check any that apply">
+                        {q.options.map((option) => (
+                          <label key={option} className="doc-check">
+                            <input type="checkbox" checked={(draft.checks[q.id] ?? []).includes(option)} onChange={() => toggleCheck(q.id, option)} />
+                            {option}
+                          </label>
+                        ))}
+                      </div>
+                    )}
+                    <textarea id={q.id} rows={2} value={draft.answers[q.id] ?? ''} onChange={(e) => setAnswer(q.id, e.target.value)} placeholder={q.placeholder ?? 'Your answer'} />
                     {q.files && (
                       <div className="doc-files">
                         <input ref={(el) => { pickers.current[q.id] = el }} type="file" multiple hidden onChange={(e) => void addFiles(q.id, e)} />
                         <button type="button" className="doc-attach" onClick={() => pickers.current[q.id]?.click()}>Attach files</button>
+                        {q.fileHint && <span className="doc-hint">{q.fileHint}</span>}
                         {mine.map((f) => (
                           <span className="doc-file" key={f.filename}>{f.filename} · {megabytes(f.size)}
                             <button type="button" aria-label={`Remove ${f.filename}`} onClick={() => setFiles((cur) => cur.filter((x) => x !== f))}>×</button>
