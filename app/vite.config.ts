@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig, type Plugin } from 'vitest/config'
 import { loadEnv } from 'vite'
-import { handleSubmit } from './src/setup/submit.ts'
+import { handleSubmit } from './src/setup/submit.js'
 
 /** Serves POST /api/submit during `npm run dev` with the same handler Vercel runs, so the setup page can be tested without the Vercel CLI. */
 function setupApi(): Plugin {

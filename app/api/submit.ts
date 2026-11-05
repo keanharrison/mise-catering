@@ -1,4 +1,4 @@
-import { handleSubmit } from '../src/setup/submit'
+import { handleSubmit } from '../src/setup/submit.js'
 
 /** Vercel function: POST /api/submit. Set RESEND_API_KEY and SETUP_TO_EMAIL in the project's environment variables. */
 export default async function handler(

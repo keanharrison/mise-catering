@@ -1,4 +1,4 @@
-import { allQuestions, sections } from './questions.ts'
+import { allQuestions, sections } from './questions.js'
 
 export type SubmittedFile = { questionId: string; filename: string; contentBase64: string }
 export type Submission = {
