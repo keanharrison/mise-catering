@@ -4,8 +4,8 @@ const SIGN_IN_URL = '/pearl-login.html'
 const DEMO_URL = '/pearl-login.html?view=biz-email'
 
 const PRODUCT_LINKS = [
-  { label: 'Order assistant', href: '#assistant', note: 'Customers describe an event and get a proposed order.' },
-  { label: 'Staff review', href: '#review', note: 'Your team confirms, asks, or changes every order.' },
+  { label: 'Order assistant', href: '#how-it-works', note: 'Customers describe an event and get a proposed order.' },
+  { label: 'Staff review', href: '#how-it-works', note: 'Your team confirms, asks, or changes every order.' },
 ]
 
 function Chevron() {
@@ -49,7 +49,7 @@ export function Nav() {
             {open === 'product' && (
               <div id="lp-product-menu" className="lp-menu">
                 {PRODUCT_LINKS.map((l) => (
-                  <a key={l.href} href={l.href} className="lp-menu-link" onClick={() => setOpen(null)}>
+                  <a key={l.label} href={l.href} className="lp-menu-link" onClick={() => setOpen(null)}>
                     <span>{l.label}</span>
                     <small>{l.note}</small>
                   </a>
@@ -76,7 +76,7 @@ export function Nav() {
 
       {open === 'mobile' && (
         <div id="lp-mobile" className="lp-mobile">
-          {PRODUCT_LINKS.map((l) => <a key={l.href} href={l.href} onClick={() => setOpen(null)}>{l.label}</a>)}
+          {PRODUCT_LINKS.map((l) => <a key={l.label} href={l.href} onClick={() => setOpen(null)}>{l.label}</a>)}
           <a href="#how-it-works" onClick={() => setOpen(null)}>How it works</a>
           <a href="#restaurants" onClick={() => setOpen(null)}>For restaurants</a>
           <div className="lp-mobile-actions">

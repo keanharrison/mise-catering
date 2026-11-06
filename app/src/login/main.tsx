@@ -22,6 +22,7 @@ function MarkCompare() {
       <svg width={1179 * scale} height={981 * scale} viewBox="-67 -805 1179 981" fill="currentColor" role="img" aria-label="Cinzel Decorative M"><path d={CINZEL_M} transform="scale(1 -1)" /></svg>
       <span className="mise-glyph" aria-label="Script m">{'\u{1D4F6}'}</span>
       <span className="mise-glyph" aria-label="Hooked m">{'\u0271'}</span>
+      <svg height={37} viewBox="0 0 120 48" fill="currentColor" role="img" aria-label="Three-slash M mark"><path d="M0 48 22 0h18L18 48H0Zm30 0L52 0h18L48 48H30Zm30 0L82 0h18L78 48H60Z" /></svg>
     </div>
   )
 }

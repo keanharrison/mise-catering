@@ -1,0 +1,55 @@
+/* Archived: the fanned row of six punch-hole cards ("Sound familiar?"). Not imported anywhere.
+   Restore with archive/Cards.tsx, archive/CardArt.tsx and the section markup in archive/README.md. */
+/* ---- Cards section (fanned row of six, above the footer) ---- */
+.lp-section { max-width: 1440px; margin: 0 auto; padding: clamp(72px, 12vh, 128px) 16px; }
+@media (min-width: 768px) { .lp-section { padding-left: 32px; padding-right: 32px; } }
+@media (min-width: 1280px) { .lp-section { padding-left: 64px; padding-right: 64px; } }
+.lp-section h2 { margin: 0 0 clamp(36px, 6vh, 64px); text-align: center; font-size: clamp(32px, 4.4vw, 48px); font-weight: 400; line-height: 1.05; letter-spacing: -0.02em; }
+.lp-cards { --card-w: clamp(170px, 16vw, 232px); display: flex; justify-content: center; align-items: flex-end; padding: 16px 0 24px; }
+@media (max-width: 1100px) { .lp-cards { justify-content: flex-start; overflow-x: auto; scroll-snap-type: x mandatory; padding: 24px 24px 32px; margin: 0 -16px; } .lp-mini { scroll-snap-align: center; } }
+.lp-mini {
+  --rot: 0deg;
+  position: relative; z-index: 1; display: flex; flex: none; flex-direction: column; overflow: hidden;
+  width: var(--card-w); aspect-ratio: 11 / 16; margin-left: calc(var(--card-w) * -0.06);
+  background: var(--paper); border: 1px solid color-mix(in srgb, var(--ink) 80%, transparent);
+  box-shadow: 0 6px 16px -8px rgb(0 0 0 / 0.18);
+  transform: rotate(var(--rot)); transform-origin: 50% 100%;
+  transition: transform 0.6s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.6s cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: transform; backface-visibility: hidden;
+  /* Three punch holes along the top edge, scaled with the card. */
+  --hole: calc(var(--card-w) * 0.032);
+  --hole-y: calc(var(--card-w) * 0.073);
+  --hole-dx: calc(var(--card-w) * 0.109);
+  -webkit-mask:
+    radial-gradient(circle var(--hole) at calc(50% - var(--hole-dx)) var(--hole-y), #0000 calc(var(--hole) * 0.85), #000 calc(var(--hole) * 0.92)),
+    radial-gradient(circle var(--hole) at 50% var(--hole-y), #0000 calc(var(--hole) * 0.85), #000 calc(var(--hole) * 0.92)),
+    radial-gradient(circle var(--hole) at calc(50% + var(--hole-dx)) var(--hole-y), #0000 calc(var(--hole) * 0.85), #000 calc(var(--hole) * 0.92));
+  -webkit-mask-composite: source-in;
+  mask:
+    radial-gradient(circle var(--hole) at calc(50% - var(--hole-dx)) var(--hole-y), #0000 calc(var(--hole) * 0.85), #000 calc(var(--hole) * 0.92)),
+    radial-gradient(circle var(--hole) at 50% var(--hole-y), #0000 calc(var(--hole) * 0.85), #000 calc(var(--hole) * 0.92)),
+    radial-gradient(circle var(--hole) at calc(50% + var(--hole-dx)) var(--hole-y), #0000 calc(var(--hole) * 0.85), #000 calc(var(--hole) * 0.92));
+  mask-composite: intersect;
+}
+.lp-mini::after { content: ''; position: absolute; inset: calc(var(--card-w) * 0.0273); border: 1px dashed color-mix(in srgb, var(--ink) 55%, transparent); pointer-events: none; z-index: 3; }
+.lp-cards .lp-mini:first-child { margin-left: 0; }
+.lp-cards .lp-mini:nth-child(1) { --rot: -3deg; }
+.lp-cards .lp-mini:nth-child(2) { --rot: -1.8deg; }
+.lp-cards .lp-mini:nth-child(3) { --rot: -0.6deg; }
+.lp-cards .lp-mini:nth-child(4) { --rot: 0.6deg; }
+.lp-cards .lp-mini:nth-child(5) { --rot: 1.8deg; }
+.lp-cards .lp-mini:nth-child(6) { --rot: 3deg; }
+.lp-mini:hover { z-index: 100; transform: rotate(0deg) translateY(-12px) scale(1.03); box-shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 8px 16px -4px rgb(0 0 0 / 0.1), 0 30px 50px -18px rgb(0 0 0 / 0.22); }
+.lp-cards .lp-mini:hover ~ .lp-mini { transform: rotate(var(--rot)) translateX(calc(var(--card-w) * 0.1)); }
+.lp-cards .lp-mini:has(~ .lp-mini:hover) { transform: rotate(var(--rot)) translateX(calc(var(--card-w) * -0.1)); }
+.lp-mini-art { display: block; width: 100%; aspect-ratio: 220 / 138; flex: none; image-rendering: pixelated; }
+.lp-mini-body { display: flex; flex: 1; flex-direction: column; gap: calc(var(--card-w) * 0.03); min-height: 0; padding: calc(var(--card-w) * 0.064) calc(var(--card-w) * 0.073) calc(var(--card-w) * 0.073); overflow: hidden; }
+.lp-mini-q, .lp-mini-title, .lp-mini-detail { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; margin: 0; }
+.lp-mini-q { font-size: max(12px, calc(var(--card-w) * 0.062)); font-weight: 400; line-height: 1.3; color: var(--line-text); letter-spacing: -0.01em; -webkit-line-clamp: 2; }
+.lp-mini-title { font-size: max(15px, calc(var(--card-w) * 0.085)); font-weight: 600; line-height: 1.2; color: var(--ink); letter-spacing: -0.015em; -webkit-line-clamp: 2; }
+.lp-mini-detail { font-size: max(13px, calc(var(--card-w) * 0.07)); line-height: 1.4; color: var(--ink); -webkit-line-clamp: 4; }
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .lp-mini, .lp-sc { transition: none; animation: none; }
+  .lp-mini:hover, .lp-cards .lp-mini:hover ~ .lp-mini, .lp-cards .lp-mini:has(~ .lp-mini:hover) { transform: rotate(var(--rot)); }
+}
+

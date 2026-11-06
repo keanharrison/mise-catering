@@ -1,5 +1,5 @@
 import { useId, useState, type FormEvent } from 'react'
-import { DEMO_EMAIL_KEY, WORK_EMAIL_ERROR, isWorkEmail } from '../lib/workEmail'
+import { DEMO_EMAIL_KEY, WORK_EMAIL_ERROR, isWorkEmail } from '../../lib/workEmail'
 
 /** Work-email field plus the demo button. A valid address is handed to the demo form through session storage, never the URL. */
 export function DemoForm() {

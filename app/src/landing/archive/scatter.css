@@ -1,0 +1,25 @@
+/* Archived: the scattered-desk hero image (Scatter.tsx) and its two-column hero grid. Not imported anywhere. */
+@media (min-width: 1000px) {
+  .lp-hero-inner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 560px); align-items: start; gap: clamp(32px, 4vw, 72px); padding-top: clamp(28px, 6vh, 64px); padding-bottom: 32px; }
+}
+
+/* ---- Scattered desk (hero image) ---- */
+.lp-scatter { position: relative; width: min(100%, 560px, calc(100dvh - var(--nav-height) - 190px)); aspect-ratio: 1 / 1; container-type: inline-size; justify-self: end; }
+.lp-sc { position: absolute; padding: 2.2cqw 2.6cqw 2.6cqw; background: var(--paper); border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent); border-radius: 0.8cqw; box-shadow: 0 1.8cqw 4cqw -2cqw rgb(0 0 0 / 0.3), 0 1px 2px rgb(0 0 0 / 0.06); transform: rotate(var(--rot, 0deg)); animation: lp-bob 8s ease-in-out var(--delay, 0s) infinite alternate; }
+@keyframes lp-bob { from { translate: 0 -0.5cqw; } to { translate: 0 0.7cqw; } }
+.lp-sc p { margin: 0; max-width: none; }
+.lp-sc-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.6cqw !important; font-size: 1.9cqw; line-height: 1.2; color: var(--muted) !important; }
+.lp-sc-head { margin-bottom: 1.8cqw !important; font-size: 2.2cqw; font-weight: 600; letter-spacing: 0.04em; color: var(--ink) !important; }
+.lp-sc-text { font-size: 3cqw; line-height: 1.25; font-weight: 500; color: var(--ink) !important; }
+.lp-sc-line { padding: 1.1cqw 0; border-top: 1px solid color-mix(in srgb, var(--ink) 9%, transparent); font-size: 2.3cqw; line-height: 1.2; color: color-mix(in srgb, var(--ink) 80%, var(--paper)) !important; }
+.lp-sc-hand { font-size: 3cqw; line-height: 1.35; font-style: italic; color: color-mix(in srgb, var(--ink) 85%, var(--paper)) !important; }
+.lp-sc-sticky { background: color-mix(in srgb, var(--line) 48%, var(--paper)); }
+.lp-sc-slip { background: color-mix(in srgb, var(--paper) 90%, var(--line)); }
+.lp-sc-receipt { padding-bottom: 3.6cqw; clip-path: polygon(0 0, 100% 0, 100% 96%, 92% 100%, 84% 96%, 76% 100%, 68% 96%, 60% 100%, 52% 96%, 44% 100%, 36% 96%, 28% 100%, 20% 96%, 12% 100%, 4% 96%, 0 100%); border: 0; }
+.lp-sc-badge { display: inline-grid; place-items: center; min-width: 3cqw; height: 3cqw; padding: 0 0.8cqw; border-radius: 1.5cqw; background: var(--ink); color: var(--paper); font-size: 1.8cqw; font-weight: 500; }
+.lp-sc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8cqw; }
+.lp-sc-grid i { display: block; height: 2.2cqw; border-radius: 0.4cqw; background: color-mix(in srgb, var(--ink) 9%, transparent); }
+.lp-sc-grid i.is-head { background: color-mix(in srgb, var(--line) 75%, transparent); }
+.lp-sc-bar { display: block; height: 1.3cqw; margin-top: 1.3cqw; border-radius: 0.7cqw; background: color-mix(in srgb, var(--ink) 13%, transparent); }
+@media (max-width: 999px) { .lp-scatter { justify-self: center; max-width: 480px; margin-top: 8px; } }
+

@@ -1,0 +1,36 @@
+/* Archived: the gray box and floating chore cards that sat under the hero. Not imported anywhere.
+   Restore with archive/Collage.tsx plus the <section className="lp-box"> markup in archive/README.md. */
+.lp-box { position: relative; display: flex; flex: 1; flex-direction: column; min-height: 0; margin-top: clamp(20px, 4vh, 40px); padding: clamp(20px, 3.5vh, 36px) 0 0; overflow: hidden; background: color-mix(in srgb, var(--ink) 4%, var(--paper)); border: 1px solid color-mix(in srgb, var(--ink) 7%, transparent); border-bottom: 0; border-radius: 24px 24px 0 0; }
+.lp-box h2 { margin: 0; text-align: center; font-size: clamp(22px, 2.6vw, 34px); font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; }
+
+/* The collage stage. Cards are placed by percentage, so the scene scales with the box. */
+.lp-stage { position: relative; flex: 1; min-height: 0; margin-top: clamp(28px, 6vh, 56px); }
+.lp-links { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.lp-links path { fill: none; stroke: color-mix(in srgb, var(--ink) 38%, transparent); stroke-width: 1; stroke-dasharray: 3 5; animation: lp-flow 14s linear infinite; }
+@keyframes lp-flow { to { stroke-dashoffset: -80; } }
+.lp-chore { position: absolute; width: clamp(150px, 17vw, 240px); padding: 12px 14px 14px; transform: translate(-50%, -50%) rotate(var(--rot, 0deg)); background: var(--paper); border: 1px solid color-mix(in srgb, var(--ink) 9%, transparent); border-radius: 10px; box-shadow: 0 10px 28px -14px rgb(0 0 0 / 0.22), 0 1px 2px rgb(0 0 0 / 0.05); animation: lp-bob 7s ease-in-out var(--delay, 0s) infinite alternate; }
+@keyframes lp-bob { from { translate: 0 -4px; } to { translate: 0 5px; } }
+.lp-chore p { margin: 0; max-width: none; }
+.lp-chore-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px !important; font-size: 11px !important; line-height: 1.2 !important; color: var(--muted) !important; }
+.lp-chore-text { font-size: 15px !important; line-height: 1.3 !important; color: var(--ink) !important; font-weight: 500; }
+.lp-chore-line { padding: 5px 0; border-top: 1px solid color-mix(in srgb, var(--ink) 8%, transparent); font-size: 12.5px !important; line-height: 1.2 !important; color: color-mix(in srgb, var(--ink) 78%, var(--paper)) !important; }
+.lp-chore-hand { font-size: 15px !important; line-height: 1.5 !important; font-style: italic; color: color-mix(in srgb, var(--ink) 80%, var(--paper)) !important; }
+.lp-chore-slip { background: color-mix(in srgb, var(--paper) 92%, var(--line)); }
+.lp-chore-note { width: clamp(120px, 12vw, 170px); background: color-mix(in srgb, var(--line) 38%, var(--paper)); }
+.lp-badge { display: inline-grid; place-items: center; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--ink); color: var(--paper); font-size: 11px; font-weight: 500; }
+.lp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+.lp-grid i { display: block; height: 10px; border-radius: 2px; background: color-mix(in srgb, var(--ink) 9%, transparent); }
+.lp-grid i.is-head { background: color-mix(in srgb, var(--line) 70%, transparent); }
+.lp-bar { display: block; height: 8px; margin-top: 6px; border-radius: 4px; background: color-mix(in srgb, var(--ink) 12%, transparent); }
+
+/* Short windows and phones show fewer cards so the scene never crowds the headline. */
+@media (max-height: 780px) { .lp-chore-calendar, .lp-chore-note { display: none; } }
+@media (max-width: 760px) {
+  .lp-chore-sheet, .lp-chore-slip, .lp-chore-note { display: none; }
+  .lp-chore { width: clamp(140px, 42vw, 190px); }
+  .lp-chore-call { left: 30% !important; top: 18% !important; }
+  .lp-chore-text { left: 72% !important; top: 40% !important; }
+  .lp-chore-email { left: 44% !important; top: 58% !important; }
+  .lp-chore-calendar { left: 34% !important; top: 88% !important; }
+}
+

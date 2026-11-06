@@ -1,4 +1,4 @@
-import { DitherPanel } from '../login/DitherPanel'
+import { DitherPanel } from '../../login/DitherPanel'
 
 const STEPS = [
   { id: undefined, who: 'The customer', title: 'Describes the event', body: 'Date, headcount and dietary needs, in their own words, or by choosing items directly.', rot: -3, seed: 1018 },
