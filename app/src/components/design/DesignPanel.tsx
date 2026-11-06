@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { FONTS, PRESETS, mix, resolve, type ChatShape, type ChatStyle, type FontChoice, type LineTone, type Pill, type Theme } from '../../lib/designTheme'
+import { COMBOS, FONTS, PRESETS, mix, resolve, type ChatShape, type ChatStyle, type FontChoice, type LineTone, type Pill, type Theme } from '../../lib/designTheme'
 
 type Props = {
   theme: Theme
@@ -47,6 +47,26 @@ export function DesignPanel({ theme, onChange, onReset, surface, defaultOpen = f
   const brand = PRESETS.slice(0, 4)
   const others = PRESETS.slice(4)
 
+  const combos = (
+    <>
+      <p className="dp-swatches-group" style={{ marginTop: 12 }}>Combinations</p>
+      <div className="dp-combos">
+        {COMBOS.map((c) => (
+          <button
+            key={c.name} type="button" className="dp-combo" title={c.name} aria-label={`${c.name} combination`}
+            data-active={theme.accent === c.theme.accent && theme.ink === c.theme.ink && theme.paper === c.theme.paper}
+            onClick={() => onChange({ ...c.theme, hover: null, mid: null })}
+          >
+            <span className="dp-combo-chip" style={{ background: c.theme.paper, borderColor: c.theme.ink }}>
+              <i style={{ background: c.theme.accent }} /><b style={{ background: c.theme.ink }} />
+            </span>
+            {c.name}
+          </button>
+        ))}
+      </div>
+    </>
+  )
+
   const swatch = (p: (typeof PRESETS)[number]) => (
     <button
       key={p.name} type="button" title={p.name} aria-label={p.name}
@@ -73,13 +93,14 @@ export function DesignPanel({ theme, onChange, onReset, surface, defaultOpen = f
           <div className="dp-swatches">{brand.map(swatch)}</div>
           <p className="dp-swatches-group" style={{ marginTop: 10 }}>More</p>
           <div className="dp-swatches">{others.map(swatch)}</div>
+          {combos}
         </section>
 
         <section>
           <h3>Colors</h3>
           <ColorRow label="Accent" value={r.accent} onChange={(accent) => onChange({ accent })} />
           <ColorRow label="Hover" value={r.hover} auto={theme.hover === null} onChange={(hover) => onChange({ hover })} onAuto={() => onChange({ hover: null })} />
-          <ColorRow label="Panel tint" value={r.mid} auto={theme.mid === null} onChange={(mid) => onChange({ mid })} onAuto={() => onChange({ mid: null })} />
+          {product && <ColorRow label="Panel tint" value={r.mid} auto={theme.mid === null} onChange={(mid) => onChange({ mid })} onAuto={() => onChange({ mid: null })} />}
           <ColorRow label="Text" value={theme.ink} onChange={(ink) => onChange({ ink })} />
           <ColorRow label="Background" value={theme.paper} onChange={(paper) => onChange({ paper, mid: theme.mid })} />
           <div className="dp-chips">
@@ -123,13 +144,20 @@ export function DesignPanel({ theme, onChange, onReset, surface, defaultOpen = f
             </section>
           </>
         ) : (
+          <>
           <section>
-            <h3>Backdrop texture</h3>
+            <h3>Type</h3>
+            <Seg<FontChoice> label="Font" value={theme.font} options={(Object.keys(FONTS) as FontChoice[]).map((id) => [id, id === 'system' ? 'Inter (default)' : FONTS[id].label])} onChange={(font) => onChange({ font })} />
+          </section>
+          <section>
+            <h3>Sign-up backdrop</h3>
+            <ColorRow label="Tint" value={r.mid} auto={theme.mid === null} onChange={(mid) => onChange({ mid })} onAuto={() => onChange({ mid: null })} />
             <div className="dp-row">
               <label className="dp-label" htmlFor="dp-cell">Tile size <em>{theme.cell}px</em></label>
               <input id="dp-cell" type="range" min={2} max={12} value={theme.cell} onChange={(e) => onChange({ cell: Number(e.target.value) })} />
             </div>
           </section>
+          </>
         )}
       </aside>
     </>

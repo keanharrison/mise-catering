@@ -5,8 +5,11 @@ import { LOGIN_URL, fetchProfile, homeFor, isStaffRole, requestDemo, saveProfile
 import { DitherPanel } from './DitherPanel'
 import { DesignPanel } from '../components/design/DesignPanel'
 import '../components/design/design-panel.css'
-import { resolve, useDesignTheme } from './theme'
+import { FONTS, mix, resolve, useDesignTheme } from './theme'
 import '@fontsource-variable/inter'
+import '@fontsource-variable/dm-sans'
+import '@fontsource-variable/space-grotesk'
+import '@fontsource-variable/nunito'
 import './login.css'
 
 // The "M" is the capital M glyph from Cantique (SIL Open Font License), converted to a path so it needs no font to render.
@@ -64,7 +67,7 @@ function Field(props: { id: string; label: string; type?: string; value: string;
       <label htmlFor={props.id}>{props.label}{required ? ' *' : ''}</label>
       <input
         id={props.id} type={props.type ?? 'text'} required={required} readOnly={props.readOnly}
-        autoComplete={props.autoComplete} autoFocus={props.autoFocus} minLength={props.minLength}
+        autoComplete={props.autoComplete} autoFocus={props.autoFocus} minLength={props.minLength} placeholder=" "
         value={props.value} onChange={(e) => props.onChange(e.target.value)}
       />
     </div>
@@ -176,7 +179,7 @@ function LoginPage() {
   const shell = (children: ReactNode, tone: 'light' | 'dark' = 'light') => (
     <div
       className={`mise-page mise-${tone}`}
-      style={{ '--line': r.accent, '--line-hover': r.hover, '--on-accent': r.onAccent, '--line-text': r.accentText, ...(tone === 'light' ? { '--ink': theme.ink, '--paper': theme.paper } : {}) } as React.CSSProperties}
+      style={{ '--line': r.accent, '--line-hover': r.hover, '--on-accent': r.onAccent, '--line-text': r.accentText, '--sans': (theme.font === 'system' ? FONTS.inter : FONTS[theme.font]).stack, ...(tone === 'light' ? { '--ink': theme.ink, '--paper': theme.paper, '--muted': mix(theme.ink, theme.paper, 0.42), '--edge': mix(theme.ink, theme.paper, 0.48) } : {}) } as React.CSSProperties}
     >
       <DesignPanel theme={theme} onChange={patchTheme} onReset={resetTheme} surface="login" />
       {children}

@@ -73,6 +73,17 @@ export const PRESETS: { name: string; theme: Partial<Theme> }[] = [
   { name: 'Antique Gold', theme: { accent: '#ad8b4a' } },
 ]
 
+/** Whole-page color combinations: accent, text and background chosen together. */
+export const COMBOS: { name: string; theme: Pick<Theme, 'accent' | 'ink' | 'paper'> }[] = [
+  { name: 'Lime on white', theme: { accent: '#e6f23a', ink: '#111111', paper: '#ffffff' } },
+  { name: 'Orange on cream', theme: { accent: '#ff6600', ink: '#1a1410', paper: '#fff7f0' } },
+  { name: 'Aqua on mist', theme: { accent: '#00a1ca', ink: '#0b2530', paper: '#f2fafc' } },
+  { name: 'Basil on bone', theme: { accent: '#1f9d55', ink: '#14201a', paper: '#f6f5ef' } },
+  { name: 'Clay on sand', theme: { accent: '#b6654d', ink: '#2a1d18', paper: '#f7efe8' } },
+  { name: 'Lime on charcoal', theme: { accent: '#d7f33a', ink: '#f4f2ef', paper: '#1a1919' } },
+  { name: 'Lilac on night', theme: { accent: '#c4a1ff', ink: '#f3effa', paper: '#1c1726' } },
+]
+
 const KEY = 'mise-design-theme'
 
 function rgb(hex: string): [number, number, number] {
