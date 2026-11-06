@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export type FontChoice = 'space' | 'inter' | 'nunito' | 'dm' | 'system'
+export type FontChoice = 'space' | 'inter' | 'nunito' | 'dm' | 'hanken' | 'system'
 export type ChatShape = 'pill' | 'rounded' | 'sharp'
 export type ChatStyle = 'gradient' | 'tint' | 'plain'
 export type Pill = 'match' | 'pill'
@@ -41,6 +41,7 @@ export const FONTS: Record<FontChoice, { label: string; stack: string }> = {
   inter: { label: 'Inter', stack: "'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
   nunito: { label: 'Nunito', stack: "'Nunito Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
   dm: { label: 'DM Sans', stack: "'DM Sans Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
+  hanken: { label: 'Hanken Grotesk', stack: "'Hanken Grotesk Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
   system: { label: 'System', stack: "system-ui, -apple-system, 'Segoe UI', sans-serif" },
 }
 
@@ -75,13 +76,8 @@ export const PRESETS: { name: string; theme: Partial<Theme> }[] = [
 
 /** Whole-page color combinations: accent, text and background chosen together. */
 export const COMBOS: { name: string; theme: Pick<Theme, 'accent' | 'ink' | 'paper'> }[] = [
-  { name: 'Lime on white', theme: { accent: '#e6f23a', ink: '#111111', paper: '#ffffff' } },
-  { name: 'Orange on cream', theme: { accent: '#ff6600', ink: '#1a1410', paper: '#fff7f0' } },
-  { name: 'Aqua on mist', theme: { accent: '#00a1ca', ink: '#0b2530', paper: '#f2fafc' } },
-  { name: 'Basil on bone', theme: { accent: '#1f9d55', ink: '#14201a', paper: '#f6f5ef' } },
-  { name: 'Clay on sand', theme: { accent: '#b6654d', ink: '#2a1d18', paper: '#f7efe8' } },
-  { name: 'Lime on charcoal', theme: { accent: '#d7f33a', ink: '#f4f2ef', paper: '#1a1919' } },
-  { name: 'Lilac on night', theme: { accent: '#c4a1ff', ink: '#f3effa', paper: '#1c1726' } },
+  { name: 'Light green, light', theme: { accent: '#e6f23a', ink: '#111111', paper: '#ffffff' } },
+  { name: 'Light green, dark', theme: { accent: '#d7f33a', ink: '#f4f2ef', paper: '#1a1919' } },
 ]
 
 const KEY = 'mise-design-theme'
@@ -182,12 +178,16 @@ export function applyTheme(t: Theme, root: HTMLElement = document.documentElemen
   root.dataset.fields = t.fields
 }
 
-export function readStoredTheme(): Theme {
-  try { return { ...DEFAULT_THEME, ...JSON.parse(localStorage.getItem(KEY) ?? '{}') } } catch { return DEFAULT_THEME }
+export function readStoredTheme(key = KEY, defaults: Theme = DEFAULT_THEME): Theme {
+  try { return { ...defaults, ...JSON.parse(localStorage.getItem(key) ?? '{}') } } catch { return defaults }
 }
 
-export function useDesignTheme() {
-  const [theme, setTheme] = useState<Theme>(readStoredTheme)
-  useEffect(() => { localStorage.setItem(KEY, JSON.stringify(theme)) }, [theme])
-  return [theme, (patch: Partial<Theme>) => setTheme((t) => ({ ...t, ...patch })), () => setTheme(DEFAULT_THEME)] as const
+/** The sign-in page's own look: light green on white, with a charcoal dark mode. Kept apart from the product's saved theme. */
+export const LOGIN_THEME_KEY = 'mise-login-theme'
+export const LOGIN_DEFAULT_THEME: Theme = { ...DEFAULT_THEME, accent: '#e6f23a', ink: '#111111', paper: '#ffffff', font: 'system' }
+
+export function useDesignTheme(key = KEY, defaults: Theme = DEFAULT_THEME) {
+  const [theme, setTheme] = useState<Theme>(() => readStoredTheme(key, defaults))
+  useEffect(() => { localStorage.setItem(key, JSON.stringify(theme)) }, [key, theme])
+  return [theme, (patch: Partial<Theme>) => setTheme((t) => ({ ...t, ...patch })), () => setTheme(defaults)] as const
 }

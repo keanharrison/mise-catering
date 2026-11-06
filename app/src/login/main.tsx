@@ -1,16 +1,33 @@
 import { StrictMode, useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { supabase } from '../lib/supabase'
-import { LOGIN_URL, fetchProfile, homeFor, isStaffRole, requestDemo, saveProfileLocally, sendPasswordReset, setPassword, signIn, signUp } from '../state/auth'
+import { fetchProfile, homeFor, isStaffRole, requestDemo, saveProfileLocally, sendPasswordReset, setPassword, signIn, signUp } from '../state/auth'
 import { DitherPanel } from './DitherPanel'
 import { DesignPanel } from '../components/design/DesignPanel'
 import '../components/design/design-panel.css'
-import { FONTS, mix, resolve, useDesignTheme } from './theme'
+import { COMBOS, FONTS, LOGIN_DEFAULT_THEME, LOGIN_THEME_KEY, mix, resolve, useDesignTheme } from './theme'
 import '@fontsource-variable/inter'
+import '@fontsource-variable/hanken-grotesk'
 import '@fontsource-variable/dm-sans'
 import '@fontsource-variable/space-grotesk'
 import '@fontsource-variable/nunito'
 import './login.css'
+
+// Temporary comparison of two candidate "M" marks, converted from their fonts to paths (Kihim: ITF Free Font License; Cinzel Decorative: SIL OFL).
+const KIHIM_M = 'M936 748H917L854 655H794L657 748H638L575 655H515L378 748H359L-69 113V94L69 0H88L514 632V564L210 113V94L348 0H367L793 632V564L489 113V94L627 0H646L1074 635V654Z'
+const CINZEL_M = 'M1100 -162Q1106 -162 1112 -162V-172Q1084 -176 1049.5 -176.0Q1015 -176 964.5 -161.0Q914 -146 873 -105Q789 -21 771 113L710 558L502 88Q474 27 468 -14H458L199 549L155 52Q153 35 165.5 22.0Q178 9 193 9Q193 9 193 9H209V0H15V10H31Q58 10 78.5 26.5Q99 43 104 70L167 616Q79 789 -44 789Q-55 789 -67 788V798Q-40 805 -23.0 805.0Q-6 805 14.0 803.5Q34 802 61.0 794.0Q88 786 112.0 770.5Q136 755 154.0 738.5Q172 722 188 702Q215 666 231 633L472 111L741 714H750L843 122Q864 -18 933.5 -90.0Q1003 -162 1100 -162Z'
+
+function MarkCompare() {
+  const scale = 0.05
+  return (
+    <div className="mise-compare" aria-label="Logo mark candidates">
+      <svg width={1143 * scale} height={748 * scale} viewBox="-69 -748 1143 748" fill="currentColor" role="img" aria-label="Kihim M"><path d={KIHIM_M} transform="scale(1 -1)" /></svg>
+      <svg width={1179 * scale} height={981 * scale} viewBox="-67 -805 1179 981" fill="currentColor" role="img" aria-label="Cinzel Decorative M"><path d={CINZEL_M} transform="scale(1 -1)" /></svg>
+      <span className="mise-glyph" aria-label="Script m">{'\u{1D4F6}'}</span>
+      <span className="mise-glyph" aria-label="Hooked m">{'\u0271'}</span>
+    </div>
+  )
+}
 
 function Arrow() {
   return (
@@ -62,17 +79,25 @@ function Field(props: { id: string; label: string; type?: string; value: string;
   )
 }
 
+// Local preview only: ?view=biz-email | biz-details | biz-done | signup | staff opens that screen directly.
+const PREVIEW_VIEWS: Mode[] = ['biz-email', 'biz-details', 'biz-done', 'signup', 'staff']
+const previewView = import.meta.env.DEV ? (new URLSearchParams(window.location.search).get('view') as Mode | null) : null
+const PREVIEW_EMAIL = 'preview@yourrestaurant.com'
+
 function LoginPage() {
-  const [mode, setMode] = useState<Mode>(arrivedBy === 'invite' || arrivedBy === 'recovery' ? 'set-password' : 'signin')
+  const [mode, setMode] = useState<Mode>(
+    arrivedBy === 'invite' || arrivedBy === 'recovery' ? 'set-password' : previewView && PREVIEW_VIEWS.includes(previewView) ? previewView : 'signin',
+  )
   const [step, setStep] = useState<'email' | 'password'>('email')
-  const [theme, patchTheme, resetTheme] = useDesignTheme()
+  const [theme, patchTheme, resetTheme] = useDesignTheme(LOGIN_THEME_KEY, LOGIN_DEFAULT_THEME)
   const r = resolve(theme)
+  const isDark = theme.paper === COMBOS[1].theme.paper
   const dither: [string, string, string] = [r.accent, r.mid, theme.paper]
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
   const [interests, setInterests] = useState<string[]>([])
-  const [f, setF] = useState({ name: '', first: '', last: '', email: '', phone: '', password: '', restaurant: '' })
+  const [f, setF] = useState({ name: '', first: '', last: '', email: previewView?.startsWith('biz-') && previewView !== 'biz-email' ? PREVIEW_EMAIL : '', phone: '', password: '', restaurant: '' })
   const set = (key: keyof typeof f) => (value: string) => setF((prev) => ({ ...prev, [key]: value }))
 
   // Already signed in: go straight to the right workspace (unless setting a password from an email link).
@@ -167,7 +192,7 @@ function LoginPage() {
   const shell = (children: ReactNode, tone: 'light' | 'dark' = 'light') => (
     <div
       className={`mise-page mise-${tone}`}
-      style={{ '--line': r.accent, '--line-hover': r.hover, '--on-accent': r.onAccent, '--line-text': r.accentText, '--sans': (theme.font === 'system' ? FONTS.inter : FONTS[theme.font]).stack, ...(tone === 'light' ? { '--ink': theme.ink, '--paper': theme.paper, '--muted': mix(theme.ink, theme.paper, 0.42), '--edge': mix(theme.ink, theme.paper, 0.48) } : {}) } as React.CSSProperties}
+      style={{ '--line': r.accent, '--line-hover': r.hover, '--on-accent': r.onAccent, '--line-text': r.accentText, '--sans': (theme.font === 'system' ? FONTS.hanken : FONTS[theme.font]).stack, ...(tone === 'light' ? { '--ink': theme.ink, '--paper': theme.paper, '--muted': mix(theme.ink, theme.paper, 0.42), '--edge': mix(theme.ink, theme.paper, 0.48) } : {}) } as React.CSSProperties}
     >
       <DesignPanel theme={theme} onChange={patchTheme} onReset={resetTheme} surface="login" />
       {children}
@@ -184,7 +209,7 @@ function LoginPage() {
           <button type="button" className="mise-card-close" aria-label="Back to sign in" onClick={() => go('signin')}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m3 3 10 10M13 3 3 13" stroke="currentColor" strokeWidth="1.4" /></svg>
           </button>
-          <div className="mise-logo mise-logo-center"><span className="mise-word">mise</span></div>
+          <div className="mise-logo mise-logo-center"><span className="mise-word">Mise</span></div>
           <h1 id="biz-title" className="mise-card-title">See Mise on your menu.</h1>
           <p className="mise-card-lead">Tell us where to reach you. We'll set up a demo around your restaurant's real menu and prices.</p>
           {messages}
@@ -200,6 +225,11 @@ function LoginPage() {
             <li><Check />Your team confirms every order</li>
             <li><Check />No commitment</li>
           </ul>
+          {import.meta.env.DEV && (
+            <button type="button" className="mise-skip" onClick={() => { set('email')(f.email.trim() || PREVIEW_EMAIL); go('biz-details') }}>
+              Skip without an email (local preview only)
+            </button>
+          )}
         </section>
       </div>,
     )
@@ -267,7 +297,18 @@ function LoginPage() {
   return shell(
     <div className="mise-frame">
       <header className="mise-top">
-        <a href={LOGIN_URL} className="mise-logo" aria-label="Mise home"><span className="mise-word">mise</span></a>
+        <MarkCompare />
+        <button
+          type="button" className="mise-mode"
+          aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+          onClick={() => patchTheme({ ...COMBOS[isDark ? 0 : 1].theme, hover: null, mid: null })}
+        >
+          {isDark ? (
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="3.2" stroke="currentColor" strokeWidth="1.4" /><path d="M9 1.5v2M9 14.5v2M1.5 9h2M14.5 9h2M3.7 3.7l1.4 1.4M12.9 12.9l1.4 1.4M3.7 14.3l1.4-1.4M12.9 5.1l1.4-1.4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /></svg>
+          ) : (
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M15 10.5A6.5 6.5 0 0 1 7.5 3 6.5 6.5 0 1 0 15 10.5Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" /></svg>
+          )}
+        </button>
       </header>
 
       <main className="mise-main">

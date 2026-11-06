@@ -147,7 +147,7 @@ export function DesignPanel({ theme, onChange, onReset, surface, defaultOpen = f
           <>
           <section>
             <h3>Type</h3>
-            <Seg<FontChoice> label="Font" value={theme.font} options={(Object.keys(FONTS) as FontChoice[]).map((id) => [id, id === 'system' ? 'Inter (default)' : FONTS[id].label])} onChange={(font) => onChange({ font })} />
+            <Seg<FontChoice> label="Font" value={theme.font} options={(Object.keys(FONTS) as FontChoice[]).map((id) => [id, id === 'system' ? 'Hanken Grotesk (default)' : FONTS[id].label])} onChange={(font) => onChange({ font })} />
           </section>
           <section>
             <h3>Sign-up backdrop</h3>
