@@ -39,14 +39,14 @@ function LandingPage() {
     <div
       className="lp-page"
       style={{
-        '--line': r.accent, '--line-hover': r.hover, '--on-accent': r.onAccent, '--ink': theme.ink, '--paper': theme.paper,
+        '--line': r.accent, '--line-hover': r.hover, '--on-accent': r.onAccent, '--on-accent-strong': r.onAccent === '#111111' ? '#050505' : r.onAccent, '--ink': theme.ink, '--paper': theme.paper,
         '--muted': mix(theme.ink, theme.paper, 0.42), '--edge': mix(theme.ink, theme.paper, 0.9), '--sans': FONTS[theme.font].stack,
       } as React.CSSProperties}
     >
       <DesignPanel theme={theme} onChange={patchTheme} onReset={resetTheme} surface="login" />
       <Nav />
       <main className="lp-main">
-        <h1>Catering orders, built around your menu.</h1>
+        <h1>Catering made easy.</h1>
         <p>Customers describe their event and get a proposed order. Your team reviews and confirms it.</p>
         <DemoForm />
       </main>

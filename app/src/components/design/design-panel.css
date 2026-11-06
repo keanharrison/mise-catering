@@ -55,11 +55,11 @@
 .dp-font:hover { background: #f3f3f3; }
 .dp-font[aria-selected='true'] { background: #111; color: #fff; }
 
-/* The sign-in page's panel floats in the middle of the screen instead of docking to the edge. */
+/* The sign-in and landing pages' panel sits on the left edge, vertically centered. */
 .dp[data-surface='login'] {
-  top: 50%; bottom: auto; left: 50%; width: min(380px, calc(100vw - 32px)); max-height: min(82vh, 760px);
+  top: 50%; bottom: auto; left: 16px; width: min(340px, calc(100vw - 32px)); max-height: min(82vh, 780px);
   padding-bottom: 24px; border: 1px solid #111; box-shadow: 0 24px 60px -20px rgb(0 0 0 / 0.35);
-  transform: translate(-50%, -50%); transition: opacity 0.15s ease, transform 0.15s ease;
+  transform: translateY(-50%); transition: opacity 0.15s ease, transform 0.15s ease;
 }
-.dp[data-surface='login'][data-open='false'] { opacity: 0; pointer-events: none; transform: translate(-50%, -48%); }
-.dp-toggle[data-surface='login'] { left: 50%; bottom: 16px; transform: translateX(-50%); border: 1px solid #111; }
+.dp[data-surface='login'][data-open='false'] { opacity: 0; pointer-events: none; transform: translate(-12px, -50%); }
+.dp-toggle[data-surface='login'] { left: 16px; bottom: 16px; border: 1px solid #111; }
