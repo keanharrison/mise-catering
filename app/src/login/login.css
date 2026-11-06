@@ -11,7 +11,8 @@ button { font: inherit; }
   --paper: #fff;
   --ink: #111;
   --muted: #6b6b6b;
-  --edge: #8a8a8a;
+  --edge: #cccccc;
+  --edge-focus: #666666;
   --line: #ff6600;
   --line-hover: #cc5200;
   --sans: 'Hanken Grotesk Variable', system-ui, -apple-system, sans-serif;
@@ -28,6 +29,7 @@ button { font: inherit; }
   --ink: #eeebe6;
   --muted: #aaa49c;
   --edge: #5a5551;
+  --edge-focus: #a39d95;
   --field: #353230;
   background: var(--paper);
 }
@@ -54,10 +56,10 @@ button { font: inherit; }
 
 /* Boxed field: label sits small above the value inside the same square box. */
 .rf { display: block; margin: 0 0 18px; padding: 7px 14px 6px; border: 1px solid var(--edge); border-radius: 0; background: var(--paper); transition: box-shadow 0.15s, border-color 0.15s; }
-.rf:focus-within { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.rf:focus-within { border-color: var(--edge-focus, var(--ink)); box-shadow: none; }
 .rf label { display: block; margin: 0; font-size: 12.5px; line-height: 1.3; color: var(--muted); transform-origin: left top; transition: transform 0.14s ease-out, font-size 0.14s ease-out; }
 .rf:not(:focus-within):has(input:placeholder-shown) label { font-size: 15px; transform: translateY(10px); }
-.rf input { display: block; width: 100%; height: 24px; padding: 0; border: 0; background: transparent; color: var(--ink); font-family: var(--sans); font-size: 15px; outline: none; }
+.rf input { caret-color: var(--ink); display: block; width: 100%; height: 24px; padding: 0; border: 0; background: transparent; color: var(--ink); font-family: var(--sans); font-size: 15px; outline: none; }
 .rf input:-webkit-autofill { -webkit-box-shadow: 0 0 0 1000px var(--paper) inset; -webkit-text-fill-color: var(--ink); }
 .rf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .rf-row .rf { margin-bottom: 16px; }

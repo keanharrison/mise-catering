@@ -187,7 +187,7 @@ function LoginPage() {
   const shell = (children: ReactNode, tone: 'light' | 'dark' = 'light') => (
     <div
       className={`mise-page mise-${tone}`}
-      style={{ '--line': r.accent, '--line-hover': r.hover, '--on-accent': r.onAccent, '--line-text': r.accentText, '--sans': FONTS[theme.font].stack, ...(tone === 'light' ? { '--ink': theme.ink, '--paper': theme.paper, '--muted': mix(theme.ink, theme.paper, 0.42), '--edge': mix(theme.ink, theme.paper, 0.48) } : {}) } as React.CSSProperties}
+      style={{ '--line': r.accent, '--line-hover': r.hover, '--on-accent': r.onAccent, '--line-text': r.accentText, '--sans': FONTS[theme.font].stack, ...(tone === 'light' ? { '--ink': theme.ink, '--paper': theme.paper, '--muted': mix(theme.ink, theme.paper, 0.42), '--edge': mix(theme.ink, theme.paper, 0.79), '--edge-focus': mix(theme.ink, theme.paper, 0.36) } : {}) } as React.CSSProperties}
     >
       <DesignPanel theme={theme} onChange={patchTheme} onReset={resetTheme} surface="login" />
       {children}
@@ -312,7 +312,7 @@ function LoginPage() {
                     <button type="button" onClick={() => { setStep('email'); setError('') }}>Change</button>
                   </div>
                 ) : (
-                  <Field id="email" label="Email address" type="email" value={f.email} onChange={set('email')} autoComplete="email" autoFocus={signinLike || mode !== 'signup'} />
+                  <Field id="email" label="Email address" type="email" value={f.email} onChange={set('email')} autoComplete="email" autoFocus={!signinLike && mode !== 'signup'} />
                 )
               )}
               {mode === 'signup' && <Field id="phone" label="Phone" type="tel" value={f.phone} onChange={set('phone')} autoComplete="tel" />}
