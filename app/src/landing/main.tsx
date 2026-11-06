@@ -5,6 +5,7 @@ import '../components/design/design-panel.css'
 import { FONTS, LOGIN_DEFAULT_THEME, LOGIN_THEME_KEY, mix, resolve, useDesignTheme } from '../lib/designTheme'
 import '../lib/fonts.css'
 import { DEMO_EMAIL_KEY, WORK_EMAIL_ERROR, isWorkEmail } from '../lib/workEmail'
+import { DotField } from './DotField'
 import { Nav } from './Nav'
 import './landing.css'
 
@@ -45,11 +46,14 @@ function LandingPage() {
     >
       <DesignPanel theme={theme} onChange={patchTheme} onReset={resetTheme} surface="login" />
       <Nav />
-      <main className="lp-main">
-        <h1>Catering made easy.</h1>
-        <p>Customers describe their event and get a proposed order. Your team reviews and confirms it.</p>
-        <DemoForm />
-      </main>
+      <section className="lp-hero">
+        <DotField color={mix(theme.ink, theme.paper, 0.76)} />
+        <main className="lp-main">
+          <h1>Catering made easy.</h1>
+          <p>Customers describe their event and get a proposed order. Your team reviews and confirms it.</p>
+          <DemoForm />
+        </main>
+      </section>
     </div>
   )
 }
