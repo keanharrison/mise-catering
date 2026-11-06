@@ -1,6 +1,7 @@
 import { StrictMode, useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { supabase } from '../lib/supabase'
+import { DEMO_EMAIL_KEY, WORK_EMAIL_ERROR, isWorkEmail } from '../lib/workEmail'
 import { fetchProfile, homeFor, isStaffRole, requestDemo, saveProfileLocally, sendPasswordReset, setPassword, signIn, signUp } from '../state/auth'
 import { DitherPanel } from './DitherPanel'
 import { DesignPanel } from '../components/design/DesignPanel'
@@ -47,10 +48,6 @@ type Mode = 'signin' | 'staff' | 'signup' | 'biz-email' | 'biz-details' | 'biz-d
 // Invite and password-reset links arrive with a type in the URL hash; read it before the Supabase client consumes it.
 const arrivedBy = new URLSearchParams(window.location.hash.slice(1)).get('type')
 
-// A demo request needs a restaurant's own address, so personal mailboxes are turned away.
-const PERSONAL_DOMAINS = new Set(['gmail.com', 'googlemail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'live.com', 'msn.com', 'icloud.com', 'me.com', 'aol.com', 'proton.me', 'protonmail.com', 'gmx.com'])
-const isWorkEmail = (email: string) => !PERSONAL_DOMAINS.has(email.trim().toLowerCase().split('@')[1] ?? '')
-
 const INTERESTS = [
   'Catering orders and intake',
   'AI ordering assistant',
@@ -77,12 +74,24 @@ function Field(props: { id: string; label: string; type?: string; value: string;
 
 // Local preview only: ?view=biz-email | biz-details | biz-done | signup | staff opens that screen directly.
 const PREVIEW_VIEWS: Mode[] = ['biz-email', 'biz-details', 'biz-done', 'signup', 'staff']
-const previewView = import.meta.env.DEV ? (new URLSearchParams(window.location.search).get('view') as Mode | null) : null
+const requestedView = new URLSearchParams(window.location.search).get('view') as Mode | null
+// The demo card is a public deep link (the landing page uses it); every other preview view is local only.
+const previewView = import.meta.env.DEV ? requestedView : requestedView === 'biz-email' ? requestedView : null
 const PREVIEW_EMAIL = 'preview@yourrestaurant.com'
+
+// An address typed on the landing page skips straight to the details step.
+function takeLandingEmail() {
+  try {
+    const email = sessionStorage.getItem(DEMO_EMAIL_KEY) ?? ''
+    sessionStorage.removeItem(DEMO_EMAIL_KEY)
+    return isWorkEmail(email) ? email.trim() : ''
+  } catch { return '' }
+}
+const landingEmail = requestedView === 'biz-email' ? takeLandingEmail() : ''
 
 function LoginPage() {
   const [mode, setMode] = useState<Mode>(
-    arrivedBy === 'invite' || arrivedBy === 'recovery' ? 'set-password' : previewView && PREVIEW_VIEWS.includes(previewView) ? previewView : 'signin',
+    arrivedBy === 'invite' || arrivedBy === 'recovery' ? 'set-password' : landingEmail ? 'biz-details' : previewView && PREVIEW_VIEWS.includes(previewView) ? previewView : 'signin',
   )
   const [step, setStep] = useState<'email' | 'password'>('email')
   const [theme, patchTheme, resetTheme] = useDesignTheme(LOGIN_THEME_KEY, LOGIN_DEFAULT_THEME)
@@ -92,7 +101,7 @@ function LoginPage() {
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
   const [interests, setInterests] = useState<string[]>([])
-  const [f, setF] = useState({ name: '', first: '', last: '', email: previewView?.startsWith('biz-') && previewView !== 'biz-email' ? PREVIEW_EMAIL : '', phone: '', password: '', restaurant: '' })
+  const [f, setF] = useState({ name: '', first: '', last: '', email: landingEmail || (previewView?.startsWith('biz-') && previewView !== 'biz-email' ? PREVIEW_EMAIL : ''), phone: '', password: '', restaurant: '' })
   const set = (key: keyof typeof f) => (value: string) => setF((prev) => ({ ...prev, [key]: value }))
 
   // Already signed in: go straight to the right workspace (unless setting a password from an email link).
@@ -146,7 +155,7 @@ function LoginPage() {
   function submitWorkEmail(e: FormEvent) {
     e.preventDefault()
     if (!isWorkEmail(f.email)) {
-      setError("Use your restaurant's work email. Personal addresses like gmail.com can't be used to request a demo.")
+      setError(WORK_EMAIL_ERROR)
       return
     }
     go('biz-details')

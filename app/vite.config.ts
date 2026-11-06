@@ -38,6 +38,7 @@ export default defineConfig({
         main: fileURLToPath(new URL('./index.html', import.meta.url)),
         'pearl-login': fileURLToPath(new URL('./pearl-login.html', import.meta.url)),
         setup: fileURLToPath(new URL('./setup.html', import.meta.url)),
+        landing: fileURLToPath(new URL('./landing.html', import.meta.url)),
       },
     },
   },
