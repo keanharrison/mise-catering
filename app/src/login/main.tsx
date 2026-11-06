@@ -6,9 +6,7 @@ import { DitherPanel } from './DitherPanel'
 import { DesignPanel } from '../components/design/DesignPanel'
 import '../components/design/design-panel.css'
 import { resolve, useDesignTheme } from './theme'
-import '@fontsource/space-grotesk/400.css'
-import '@fontsource/space-grotesk/500.css'
-import '@fontsource/space-grotesk/600.css'
+import '@fontsource-variable/inter'
 import './login.css'
 
 function MiseMark({ size = 30 }: { size?: number }) {
@@ -192,7 +190,7 @@ function LoginPage() {
           <button type="button" className="mise-card-close" aria-label="Back to sign in" onClick={() => go('signin')}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m3 3 10 10M13 3 3 13" stroke="currentColor" strokeWidth="1.4" /></svg>
           </button>
-          <div className="mise-logo mise-logo-center"><MiseMark size={26} /><span>mise</span></div>
+          <div className="mise-logo mise-logo-center"><span>mise</span><MiseMark size={22} /></div>
           <h1 id="biz-title" className="mise-card-title">See Mise on your menu.</h1>
           <p className="mise-card-lead">Tell us where to reach you. We'll set up a demo around your restaurant's real menu and prices.</p>
           {messages}
@@ -275,7 +273,7 @@ function LoginPage() {
   return shell(
     <div className="mise-frame">
       <header className="mise-top">
-        <a href={LOGIN_URL} className="mise-logo" aria-label="Mise home"><MiseMark /><span>mise</span></a>
+        <a href={LOGIN_URL} className="mise-logo" aria-label="Mise home"><span>mise</span><MiseMark size={24} /></a>
       </header>
 
       <main className="mise-main">
