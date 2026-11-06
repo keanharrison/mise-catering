@@ -56,12 +56,6 @@ const INTERESTS = [
   'Menu, prices and portion setup',
 ]
 
-const EXPECT = [
-  { title: 'A walkthrough on your own menu and prices', path: 'M4 6h16M4 12h16M4 18h10' },
-  { title: 'How orders reach your team, calendar and customers', path: 'M5 12h14M13 6l6 6-6 6' },
-  { title: 'Straight answers on setup, timing and cost', path: 'M12 6v6l4 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z' },
-]
-
 function Field(props: { id: string; label: string; type?: string; value: string; onChange: (v: string) => void; autoComplete?: string; autoFocus?: boolean; required?: boolean; minLength?: number; readOnly?: boolean }) {
   const required = props.required ?? true
   return (
@@ -219,7 +213,7 @@ function LoginPage() {
     )
   }
 
-  // Business sign-up, step 2: the details we need to run the demo.
+  // Business sign-up, step 2: one centered column on a dark page.
   if (mode === 'biz-details' || mode === 'biz-done') {
     return shell(
       <div className="mise-demo">
@@ -227,56 +221,42 @@ function LoginPage() {
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M9 2 4 7l5 5" stroke="currentColor" strokeWidth="1.4" /></svg>
           {mode === 'biz-done' ? 'Back to sign in' : 'Back'}
         </button>
-        <div className="mise-demo-grid">
-          <section className="mise-demo-form" aria-labelledby="demo-title">
-            {mode === 'biz-done' ? (
-              <>
-                <h1 id="demo-title">Thank you{f.first ? `, ${f.first.trim()}` : ''}.</h1>
-                <p className="mise-demo-lead">We received your request and will reach out to {f.email} to set up your demo.</p>
-              </>
-            ) : (
-              <>
-                <h1 id="demo-title">Let's set up your demo.</h1>
-                <p className="mise-demo-lead">A few details so we can prepare around your restaurant.</p>
-                {messages}
-                <form onSubmit={submitDemo}>
-                  <div className="rf rf-static">
-                    <label htmlFor="d-email">Email</label>
-                    <input id="d-email" type="email" value={f.email} readOnly />
-                  </div>
-                  <div className="rf-row">
-                    <Field id="d-first" label="First name" value={f.first} onChange={set('first')} autoComplete="given-name" autoFocus />
-                    <Field id="d-last" label="Last name" value={f.last} onChange={set('last')} autoComplete="family-name" />
-                  </div>
-                  <Field id="d-restaurant" label="Restaurant name" value={f.restaurant} onChange={set('restaurant')} autoComplete="organization" />
-                  <fieldset className="mise-interests">
-                    <legend>What do you want to solve?</legend>
-                    {INTERESTS.map((name) => (
-                      <label key={name} className="mise-check">
-                        <input type="checkbox" checked={interests.includes(name)} onChange={() => toggleInterest(name)} />
-                        <span>{name}</span>
-                      </label>
-                    ))}
-                  </fieldset>
-                  <p className="mise-demo-fine">Don't worry. This is not a commitment.</p>
-                  <button type="submit" className="mise-submit" disabled={busy || !supabase}>{busy ? 'One moment…' : 'Request a demo'}</button>
-                </form>
-              </>
-            )}
-          </section>
-          <aside className="mise-expect" aria-labelledby="expect-title">
-            <DitherPanel seed={1015} colors={dither} cell={theme.cell} className="mise-expect-art" />
-            <h2 id="expect-title">What can you expect?</h2>
-            <ul>
-              {EXPECT.map((item) => (
-                <li key={item.title}>
-                  <span className="mise-expect-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d={item.path} stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg></span>
-                  {item.title}
-                </li>
-              ))}
-            </ul>
-          </aside>
-        </div>
+        <section className="mise-demo-form" aria-labelledby="demo-title">
+          {mode === 'biz-done' ? (
+            <>
+              <h1 id="demo-title">Thank you{f.first ? `, ${f.first.trim()}` : ''}.</h1>
+              <p className="mise-demo-lead">We received your request and will reach out to {f.email} to set up your demo.</p>
+            </>
+          ) : (
+            <>
+              <h1 id="demo-title">Request a demo</h1>
+              {messages}
+              <form onSubmit={submitDemo}>
+                <div className="rf rf-locked">
+                  <label htmlFor="d-email">Work email address</label>
+                  <input id="d-email" type="email" value={f.email} readOnly />
+                  <svg className="rf-lock" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.2" /><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" stroke="currentColor" strokeWidth="1.2" /></svg>
+                </div>
+                <div className="rf-row">
+                  <Field id="d-first" label="First name" value={f.first} onChange={set('first')} autoComplete="given-name" autoFocus />
+                  <Field id="d-last" label="Last name" value={f.last} onChange={set('last')} autoComplete="family-name" />
+                </div>
+                <Field id="d-restaurant" label="Restaurant name" value={f.restaurant} onChange={set('restaurant')} autoComplete="organization" />
+                <fieldset className="mise-interests">
+                  <legend>What do you want to solve?</legend>
+                  {INTERESTS.map((name) => (
+                    <label key={name} className="mise-check">
+                      <input type="checkbox" checked={interests.includes(name)} onChange={() => toggleInterest(name)} />
+                      <span>{name}</span>
+                    </label>
+                  ))}
+                </fieldset>
+                <p className="mise-demo-fine">Don't worry. This is not a commitment.</p>
+                <button type="submit" className="mise-submit" disabled={busy || !supabase}>{busy ? 'One moment…' : 'Request a demo'}</button>
+              </form>
+            </>
+          )}
+        </section>
       </div>,
       'dark',
     )
