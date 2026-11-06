@@ -40,7 +40,7 @@ function Seg<T extends string>({ label, value, options, onChange }: { label: str
   )
 }
 
-export function DesignPanel({ theme, onChange, onReset, surface, defaultOpen = surface === 'login' }: Props) {
+export function DesignPanel({ theme, onChange, onReset, surface, defaultOpen = false }: Props) {
   const [open, setOpen] = useState(defaultOpen)
   const r = resolve(theme)
   const product = surface === 'product'
