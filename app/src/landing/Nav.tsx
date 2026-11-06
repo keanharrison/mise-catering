@@ -6,7 +6,6 @@ const DEMO_URL = '/pearl-login.html?view=biz-email'
 const PRODUCT_LINKS = [
   { label: 'Order assistant', href: '#assistant', note: 'Customers describe an event and get a proposed order.' },
   { label: 'Staff review', href: '#review', note: 'Your team confirms, asks, or changes every order.' },
-  { label: 'Analytics', href: '#analytics', note: 'Counts from real orders, nothing invented.' },
 ]
 
 function Chevron() {

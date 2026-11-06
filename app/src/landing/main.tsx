@@ -1,37 +1,14 @@
-import { StrictMode, useState, type FormEvent } from 'react'
+import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { DesignPanel } from '../components/design/DesignPanel'
 import '../components/design/design-panel.css'
 import { FONTS, LOGIN_DEFAULT_THEME, LOGIN_THEME_KEY, mix, resolve, useDesignTheme } from '../lib/designTheme'
 import '../lib/fonts.css'
-import { DEMO_EMAIL_KEY, WORK_EMAIL_ERROR, isWorkEmail } from '../lib/workEmail'
+import { Deck } from './Deck'
+import { DemoForm } from './DemoForm'
 import { DotField } from './DotField'
 import { Nav } from './Nav'
 import './landing.css'
-
-function DemoForm() {
-  const [email, setEmail] = useState('')
-  const [error, setError] = useState('')
-  function submit(e: FormEvent) {
-    e.preventDefault()
-    if (!isWorkEmail(email)) { setError(WORK_EMAIL_ERROR); return }
-    try { sessionStorage.setItem(DEMO_EMAIL_KEY, email.trim()) } catch { /* the demo form just asks again */ }
-    window.location.assign('/pearl-login.html?view=biz-email')
-  }
-  return (
-    <form className="lp-cta" onSubmit={submit} noValidate>
-      <div className="lp-cta-box">
-        <input
-          type="email" value={email} placeholder="What's your work email?" aria-label="Work email" autoComplete="email"
-          aria-invalid={error ? true : undefined} aria-describedby={error ? 'lp-cta-error' : undefined}
-          onChange={(e) => { setEmail(e.target.value); setError('') }}
-        />
-        <button type="submit">Request a demo</button>
-      </div>
-      {error && <p id="lp-cta-error" className="lp-cta-error" role="alert">{error}</p>}
-    </form>
-  )
-}
 
 function LandingPage() {
   const [theme, patchTheme, resetTheme] = useDesignTheme(LOGIN_THEME_KEY, LOGIN_DEFAULT_THEME)
@@ -54,6 +31,19 @@ function LandingPage() {
           <DemoForm />
         </main>
       </section>
+
+      <Deck colors={[r.accent, r.mid, theme.paper]} />
+
+      <section id="restaurants" className="lp-section lp-close">
+        <h2>See it on your menu.</h2>
+        <p className="lp-section-lead">Tell us where to reach you and we will set up a demo around your restaurant.</p>
+        <DemoForm />
+      </section>
+
+      <footer className="lp-footer">
+        <span className="lp-footer-mark">Mise</span>
+        <a href="/pearl-login.html">Sign in</a>
+      </footer>
     </div>
   )
 }
