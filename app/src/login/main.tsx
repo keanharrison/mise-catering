@@ -5,12 +5,8 @@ import { fetchProfile, homeFor, isStaffRole, requestDemo, saveProfileLocally, se
 import { DitherPanel } from './DitherPanel'
 import { DesignPanel } from '../components/design/DesignPanel'
 import '../components/design/design-panel.css'
-import { COMBOS, FONTS, LOGIN_DEFAULT_THEME, LOGIN_THEME_KEY, mix, resolve, useDesignTheme } from './theme'
-import '@fontsource-variable/inter'
-import '@fontsource-variable/hanken-grotesk'
-import '@fontsource-variable/dm-sans'
-import '@fontsource-variable/space-grotesk'
-import '@fontsource-variable/nunito'
+import { FONTS, LOGIN_DEFAULT_THEME, LOGIN_THEME_KEY, mix, resolve, useDesignTheme } from './theme'
+import '../lib/fonts.css'
 import './login.css'
 
 // Temporary comparison of two candidate "M" marks, converted from their fonts to paths (Kihim: ITF Free Font License; Cinzel Decorative: SIL OFL).
@@ -91,7 +87,6 @@ function LoginPage() {
   const [step, setStep] = useState<'email' | 'password'>('email')
   const [theme, patchTheme, resetTheme] = useDesignTheme(LOGIN_THEME_KEY, LOGIN_DEFAULT_THEME)
   const r = resolve(theme)
-  const isDark = theme.paper === COMBOS[1].theme.paper
   const dither: [string, string, string] = [r.accent, r.mid, theme.paper]
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
@@ -192,7 +187,7 @@ function LoginPage() {
   const shell = (children: ReactNode, tone: 'light' | 'dark' = 'light') => (
     <div
       className={`mise-page mise-${tone}`}
-      style={{ '--line': r.accent, '--line-hover': r.hover, '--on-accent': r.onAccent, '--line-text': r.accentText, '--sans': (theme.font === 'system' ? FONTS.hanken : FONTS[theme.font]).stack, ...(tone === 'light' ? { '--ink': theme.ink, '--paper': theme.paper, '--muted': mix(theme.ink, theme.paper, 0.42), '--edge': mix(theme.ink, theme.paper, 0.48) } : {}) } as React.CSSProperties}
+      style={{ '--line': r.accent, '--line-hover': r.hover, '--on-accent': r.onAccent, '--line-text': r.accentText, '--sans': FONTS[theme.font].stack, ...(tone === 'light' ? { '--ink': theme.ink, '--paper': theme.paper, '--muted': mix(theme.ink, theme.paper, 0.42), '--edge': mix(theme.ink, theme.paper, 0.48) } : {}) } as React.CSSProperties}
     >
       <DesignPanel theme={theme} onChange={patchTheme} onReset={resetTheme} surface="login" />
       {children}
@@ -298,17 +293,7 @@ function LoginPage() {
     <div className="mise-frame">
       <header className="mise-top">
         <MarkCompare />
-        <button
-          type="button" className="mise-mode"
-          aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-          onClick={() => patchTheme({ ...COMBOS[isDark ? 0 : 1].theme, hover: null, mid: null })}
-        >
-          {isDark ? (
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="3.2" stroke="currentColor" strokeWidth="1.4" /><path d="M9 1.5v2M9 14.5v2M1.5 9h2M14.5 9h2M3.7 3.7l1.4 1.4M12.9 12.9l1.4 1.4M3.7 14.3l1.4-1.4M12.9 5.1l1.4-1.4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /></svg>
-          ) : (
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M15 10.5A6.5 6.5 0 0 1 7.5 3 6.5 6.5 0 1 0 15 10.5Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" /></svg>
-          )}
-        </button>
+
       </header>
 
       <main className="mise-main">

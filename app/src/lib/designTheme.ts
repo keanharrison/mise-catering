@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export type FontChoice = 'space' | 'inter' | 'nunito' | 'dm' | 'hanken' | 'system'
+export type FontChoice = 'system' | 'hanken' | 'inter' | 'roboto' | 'opensans' | 'montserrat' | 'poppins' | 'lato' | 'raleway' | 'nunito' | 'sourcesans' | 'rubik' | 'worksans' | 'dm' | 'manrope' | 'jakarta' | 'outfit' | 'space' | 'playfair' | 'merriweather' | 'lora'
 export type ChatShape = 'pill' | 'rounded' | 'sharp'
 export type ChatStyle = 'gradient' | 'tint' | 'plain'
 export type Pill = 'match' | 'pill'
@@ -36,13 +36,29 @@ export const DEFAULT_THEME: Theme = {
   chatShape: 'pill', chatStyle: 'gradient', chatIntensity: 100, lines: 'soft', fieldBorder: 'accent',
 }
 
+/** The device's own font, then twenty widely used Google Fonts. */
 export const FONTS: Record<FontChoice, { label: string; stack: string }> = {
-  space: { label: 'Space Grotesk', stack: "'Space Grotesk Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
-  inter: { label: 'Inter', stack: "'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
-  nunito: { label: 'Nunito', stack: "'Nunito Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
-  dm: { label: 'DM Sans', stack: "'DM Sans Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
-  hanken: { label: 'Hanken Grotesk', stack: "'Hanken Grotesk Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
   system: { label: 'System', stack: "system-ui, -apple-system, 'Segoe UI', sans-serif" },
+  hanken: { label: 'Hanken Grotesk', stack: "'Hanken Grotesk Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
+  inter: { label: 'Inter', stack: "'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
+  roboto: { label: 'Roboto', stack: "'Roboto Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
+  opensans: { label: 'Open Sans', stack: "'Open Sans Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
+  montserrat: { label: 'Montserrat', stack: "'Montserrat Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
+  poppins: { label: 'Poppins', stack: "'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif" },
+  lato: { label: 'Lato', stack: "'Lato', system-ui, -apple-system, 'Segoe UI', sans-serif" },
+  raleway: { label: 'Raleway', stack: "'Raleway Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
+  nunito: { label: 'Nunito', stack: "'Nunito Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
+  sourcesans: { label: 'Source Sans 3', stack: "'Source Sans 3 Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
+  rubik: { label: 'Rubik', stack: "'Rubik Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
+  worksans: { label: 'Work Sans', stack: "'Work Sans Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
+  dm: { label: 'DM Sans', stack: "'DM Sans Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
+  manrope: { label: 'Manrope', stack: "'Manrope Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
+  jakarta: { label: 'Plus Jakarta Sans', stack: "'Plus Jakarta Sans Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
+  outfit: { label: 'Outfit', stack: "'Outfit Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
+  space: { label: 'Space Grotesk', stack: "'Space Grotesk Variable', system-ui, -apple-system, 'Segoe UI', sans-serif" },
+  playfair: { label: 'Playfair Display', stack: "'Playfair Display Variable', system-ui, -apple-system, 'Segoe UI', serif" },
+  merriweather: { label: 'Merriweather', stack: "'Merriweather Variable', system-ui, -apple-system, 'Segoe UI', serif" },
+  lora: { label: 'Lora', stack: "'Lora Variable', system-ui, -apple-system, 'Segoe UI', serif" },
 }
 
 export const PRESETS: { name: string; theme: Partial<Theme> }[] = [
@@ -75,9 +91,30 @@ export const PRESETS: { name: string; theme: Partial<Theme> }[] = [
 ]
 
 /** Whole-page color combinations: accent, text and background chosen together. */
-export const COMBOS: { name: string; theme: Pick<Theme, 'accent' | 'ink' | 'paper'> }[] = [
-  { name: 'Light green, light', theme: { accent: '#e6f23a', ink: '#111111', paper: '#ffffff' } },
-  { name: 'Light green, dark', theme: { accent: '#d7f33a', ink: '#f4f2ef', paper: '#1a1919' } },
+export const COMBOS: { name: string; mode: 'light' | 'dark'; theme: Pick<Theme, 'accent' | 'ink' | 'paper'> }[] = [
+  { name: 'Light green, light', mode: 'light', theme: { accent: '#e6f23a', ink: '#111111', paper: '#ffffff' } },
+  { name: 'Orange on cream', mode: 'light', theme: { accent: '#ff6600', ink: '#1a1410', paper: '#fff7f0' } },
+  { name: 'Aqua on mist', mode: 'light', theme: { accent: '#00a1ca', ink: '#0b2530', paper: '#f2fafc' } },
+  { name: 'Basil on bone', mode: 'light', theme: { accent: '#1f9d55', ink: '#14201a', paper: '#f6f5ef' } },
+  { name: 'Clay on sand', mode: 'light', theme: { accent: '#b6654d', ink: '#2a1d18', paper: '#f7efe8' } },
+  { name: 'Ocean on paper', mode: 'light', theme: { accent: '#2563eb', ink: '#0f172a', paper: '#f8fafc' } },
+  { name: 'Tomato on white', mode: 'light', theme: { accent: '#e5382a', ink: '#1a1110', paper: '#fffaf8' } },
+  { name: 'Plum on lilac', mode: 'light', theme: { accent: '#7c3aed', ink: '#1b1230', paper: '#faf7ff' } },
+  { name: 'Gold on ivory', mode: 'light', theme: { accent: '#f5a742', ink: '#231a0c', paper: '#fffaf0' } },
+  { name: 'Forest on linen', mode: 'light', theme: { accent: '#315c4b', ink: '#14201a', paper: '#f4f1ea' } },
+  { name: 'Petrol on sea glass', mode: 'light', theme: { accent: '#285c63', ink: '#0e2427', paper: '#f1f7f6' } },
+  { name: 'Black on white', mode: 'light', theme: { accent: '#111111', ink: '#111111', paper: '#ffffff' } },
+  { name: 'Light green, dark', mode: 'dark', theme: { accent: '#d7f33a', ink: '#f4f2ef', paper: '#1a1919' } },
+  { name: 'Orange on espresso', mode: 'dark', theme: { accent: '#ff6600', ink: '#f7efe8', paper: '#1b1512' } },
+  { name: 'Aqua on ink', mode: 'dark', theme: { accent: '#00a1ca', ink: '#e8f6fb', paper: '#0c1a20' } },
+  { name: 'Basil on night', mode: 'dark', theme: { accent: '#3ddc84', ink: '#e9f4ee', paper: '#0f1a14' } },
+  { name: 'Lilac on night', mode: 'dark', theme: { accent: '#c4a1ff', ink: '#f3effa', paper: '#1c1726' } },
+  { name: 'Rose on plum', mode: 'dark', theme: { accent: '#ff8fb1', ink: '#fbeff3', paper: '#1d1318' } },
+  { name: 'Gold on charcoal', mode: 'dark', theme: { accent: '#f5c15a', ink: '#f4efe6', paper: '#1a1814' } },
+  { name: 'Ocean on navy', mode: 'dark', theme: { accent: '#6ea0ff', ink: '#eef3ff', paper: '#0d1424' } },
+  { name: 'Tomato on black', mode: 'dark', theme: { accent: '#ff5a4a', ink: '#fbeeec', paper: '#151010' } },
+  { name: 'Mint on slate', mode: 'dark', theme: { accent: '#7be0c3', ink: '#e8f1ee', paper: '#141c1b' } },
+  { name: 'White on black', mode: 'dark', theme: { accent: '#ffffff', ink: '#f4f2ef', paper: '#111111' } },
 ]
 
 const KEY = 'mise-design-theme'
@@ -110,6 +147,9 @@ function readableOn(accent: string, paper: string) {
   for (let i = 0; i < 20 && contrast(c, paper) < 4.5; i++) c = mix(c, '#000000', 0.1)
   return c
 }
+
+/** True when the background is darker than it is light. */
+export const isDarkPaper = (paper: string) => contrast(paper, '#ffffff') > contrast(paper, '#000000')
 
 export function resolve(t: Theme) {
   const hover = t.hover ?? mix(t.accent, '#000000', 0.2)
@@ -184,7 +224,7 @@ export function readStoredTheme(key = KEY, defaults: Theme = DEFAULT_THEME): The
 
 /** The sign-in page's own look: light green on white, with a charcoal dark mode. Kept apart from the product's saved theme. */
 export const LOGIN_THEME_KEY = 'mise-login-theme'
-export const LOGIN_DEFAULT_THEME: Theme = { ...DEFAULT_THEME, accent: '#e6f23a', ink: '#111111', paper: '#ffffff', font: 'system' }
+export const LOGIN_DEFAULT_THEME: Theme = { ...DEFAULT_THEME, accent: '#e6f23a', ink: '#111111', paper: '#ffffff', font: 'hanken' }
 
 export function useDesignTheme(key = KEY, defaults: Theme = DEFAULT_THEME) {
   const [theme, setTheme] = useState<Theme>(() => readStoredTheme(key, defaults))
