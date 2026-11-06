@@ -12,18 +12,6 @@ import '@fontsource-variable/space-grotesk'
 import '@fontsource-variable/nunito'
 import './login.css'
 
-// The "M" is the capital M glyph from Cantique (SIL Open Font License), converted to a path so it needs no font to render.
-const M_PATH = 'M651 507 482 807 77 0H1259L802 807ZM408 22 107 23 453 708 611 426ZM662 488 773 708 1158 22H926ZM838 22 427 23 621 408Z'
-
-function MiseMark() {
-  // Sits on the wordmark's baseline and rises to about the ascender height, as Ramp's mark does.
-  return (
-    <svg className="mise-mark" viewBox="0 0 1182 807" fill="currentColor" aria-hidden="true">
-      <path d={M_PATH} transform="translate(-77 807) scale(1 -1)" />
-    </svg>
-  )
-}
-
 function Arrow() {
   return (
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -196,7 +184,7 @@ function LoginPage() {
           <button type="button" className="mise-card-close" aria-label="Back to sign in" onClick={() => go('signin')}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m3 3 10 10M13 3 3 13" stroke="currentColor" strokeWidth="1.4" /></svg>
           </button>
-          <div className="mise-logo mise-logo-center"><span className="mise-word">mise</span><MiseMark /></div>
+          <div className="mise-logo mise-logo-center"><span className="mise-word">mise</span></div>
           <h1 id="biz-title" className="mise-card-title">See Mise on your menu.</h1>
           <p className="mise-card-lead">Tell us where to reach you. We'll set up a demo around your restaurant's real menu and prices.</p>
           {messages}
@@ -279,7 +267,7 @@ function LoginPage() {
   return shell(
     <div className="mise-frame">
       <header className="mise-top">
-        <a href={LOGIN_URL} className="mise-logo" aria-label="Mise home"><span className="mise-word">mise</span><MiseMark /></a>
+        <a href={LOGIN_URL} className="mise-logo" aria-label="Mise home"><span className="mise-word">mise</span></a>
       </header>
 
       <main className="mise-main">

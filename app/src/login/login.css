@@ -37,8 +37,8 @@ button { font: inherit; }
 .mise-frame { display: flex; flex-direction: column; min-height: 100dvh; }
 .mise-top { padding: 40px 56px 0; }
 .mise-logo { display: inline-block; color: var(--ink); text-decoration: none; font-size: 30px; line-height: 1; }
-.mise-word { font-family: var(--sans); font-size: 1em; font-weight: 500; letter-spacing: -0.045em; }
-.mise-mark { display: inline-block; height: 0.74em; width: auto; margin-left: 0.2em; vertical-align: baseline; }
+/* Wordmark follows Ramp's type spec; TWK Lausanne is licensed and not bundled, so it falls back to the page font. */
+.mise-word { font-family: 'TWK Lausanne', var(--sans); font-size: 1em; font-weight: 400; letter-spacing: -0.01em; text-rendering: optimizeLegibility; }
 .mise-logo-center { display: block; text-align: center; font-size: 26px; }
 .mise-logo:focus-visible { outline: 2px solid var(--line-hover); outline-offset: 4px; }
 
@@ -67,10 +67,8 @@ button { font: inherit; }
   display: block; width: 100%; height: 56px; padding: 0 16px;
   border: 0; border-radius: 0; background: var(--line); color: var(--on-accent, #fff);
   font-family: var(--sans); font-size: 16px; font-weight: 500; letter-spacing: -0.01em; cursor: pointer;
-  transition: background 0.15s;
 }
-.mise-submit:hover { background: var(--line-hover); }
-.mise-submit:active { filter: brightness(0.92); }
+.mise-submit:hover:not(:disabled) { box-shadow: inset 0 -3px 0 #000; }
 .mise-submit:disabled { opacity: 0.6; cursor: default; }
 .mise-submit:focus-visible, .mise-footer button:focus-visible, .mise-switch button:focus-visible, .mise-back:focus-visible, .mise-card-close:focus-visible, .mise-claim button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
@@ -105,7 +103,7 @@ button { font: inherit; }
 .mise-claim input { flex: 1; min-width: 0; height: 48px; padding: 0 16px; border: 0; border-radius: 8px; background: #eef3fc; color: #111; font-family: var(--sans); font-size: 17px; outline: none; }
 .mise-claim input:focus-visible { box-shadow: 0 0 0 2px #111 inset; }
 .mise-claim button { flex: none; height: 48px; padding: 0 22px; border: 0; border-radius: 8px; background: var(--line); color: var(--on-accent, #fff); font-family: var(--sans); font-size: 16px; font-weight: 500; cursor: pointer; transition: background 0.15s; }
-.mise-claim button:hover { background: var(--line-hover); }
+.mise-claim button:hover { box-shadow: inset 0 -3px 0 #000; }
 .mise-checks { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 24px; margin: 28px 0 0; padding: 0; list-style: none; font-size: 15px; color: #5d5a56; }
 .mise-checks li { display: inline-flex; align-items: center; gap: 8px; }
 
