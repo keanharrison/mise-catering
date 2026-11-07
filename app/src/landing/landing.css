@@ -144,3 +144,7 @@ button { font: inherit; }
 
 /* Keep the Design button clear of the footer bar. */
 .lp-page .dp-toggle { bottom: 104px; }
+
+.lp-logo .mise-wordmark, .lp-footer-mark .mise-wordmark { display: inline-flex; align-items: center; gap: 0.18em; }
+.mise-wordmark-mark { width: 0.95em; height: 0.95em; flex: none; }
+.lp-footer-mark { text-decoration: none; }

@@ -1,9 +1,9 @@
+import { MiseWordmark } from '../components/MiseLogo'
 import { useEffect, useRef, useState } from 'react'
 
 const SIGN_IN_URL = '/pearl-login.html'
 const DEMO_URL = '/pearl-login.html?view=biz-email'
 
-// Placeholder until the application flow exists.
 // Placeholder until there is a pricing page.
 const PRICING_URL = '#'
 
@@ -21,7 +21,7 @@ function Chevron() {
  * sign-in and a primary action on the right, a menu button on small screens.
  */
 export function Nav() {
-  const [open, setOpen] = useState<'product' | 'mobile' | null>(null)
+  const [open, setOpen] = useState<'product' | 'testimonials' | 'mobile' | null>(null)
   const ref = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -35,10 +35,10 @@ export function Nav() {
 
   return (
     <>
-    {open === 'product' && <div className="lp-dim" aria-hidden="true" onClick={() => setOpen(null)} />}
+    {(open === 'product' || open === 'testimonials') && <div className="lp-dim" aria-hidden="true" onClick={() => setOpen(null)} />}
     <nav ref={ref} className="lp-nav" aria-label="Main">
       <div className="lp-nav-inner">
-        <a href="/landing.html" className="lp-logo" aria-label="Mise home">Mise</a>
+        <a href="/landing.html" className="lp-logo" aria-label="Mise home"><MiseWordmark /></a>
 
         <ul className="lp-links">
           <li className="lp-item">
@@ -49,12 +49,20 @@ export function Nav() {
               Product<Chevron />
             </button>
           </li>
+          <li className="lp-item">
+            <button
+              type="button" className="lp-link" aria-expanded={open === 'testimonials'} aria-controls="lp-menu-testimonials"
+              onClick={() => setOpen(open === 'testimonials' ? null : 'testimonials')}
+            >
+              Testimonials<Chevron />
+            </button>
+          </li>
           <li className="lp-item"><a className="lp-link" href={PRICING_URL}>Pricing</a></li>
         </ul>
 
         <div className="lp-actions">
           <a className="lp-btn lp-btn-quiet" href={SIGN_IN_URL}>Sign in</a>
-          <a className="lp-btn lp-btn-primary" href={DEMO_URL}>See a demo</a>
+          <a className="lp-btn lp-btn-primary" href={DEMO_URL}>Book a call</a>
         </div>
 
         <button
@@ -65,8 +73,8 @@ export function Nav() {
         </button>
       </div>
 
-      {open === 'product' && (
-        <div id="lp-product-menu" className="lp-mega">
+      {(open === 'product' || open === 'testimonials') && (
+        <div id={open === 'product' ? 'lp-product-menu' : 'lp-menu-testimonials'} className="lp-mega">
           <div className="lp-mega-box">
             <p className="lp-menu-empty">Coming soon</p>
           </div>
@@ -78,7 +86,7 @@ export function Nav() {
           <a href={PRICING_URL} onClick={() => setOpen(null)}>Pricing</a>
           <div className="lp-mobile-actions">
             <a className="lp-btn lp-btn-quiet" href={SIGN_IN_URL}>Sign in</a>
-            <a className="lp-btn lp-btn-primary" href={DEMO_URL}>See a demo</a>
+            <a className="lp-btn lp-btn-primary" href={DEMO_URL}>Book a call</a>
           </div>
         </div>
       )}

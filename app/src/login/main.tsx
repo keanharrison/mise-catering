@@ -4,29 +4,11 @@ import { supabase } from '../lib/supabase'
 import { DEMO_EMAIL_KEY, WORK_EMAIL_ERROR, isWorkEmail } from '../lib/workEmail'
 import { fetchProfile, homeFor, isStaffRole, requestDemo, saveProfileLocally, sendPasswordReset, setPassword, signIn, signUp } from '../state/auth'
 import { DitherPanel } from './DitherPanel'
+import { MiseWordmark } from '../components/MiseLogo'
 import { DotField } from '../landing/DotField'
-import { DesignPanel } from '../components/design/DesignPanel'
-import '../components/design/design-panel.css'
 import { FONTS, LOGIN_DEFAULT_THEME, LOGIN_THEME_KEY, mix, resolve, useDesignTheme } from './theme'
 import '../lib/fonts.css'
 import './login.css'
-
-// Temporary comparison of two candidate "M" marks, converted from their fonts to paths (Kihim: ITF Free Font License; Cinzel Decorative: SIL OFL).
-const KIHIM_M = 'M936 748H917L854 655H794L657 748H638L575 655H515L378 748H359L-69 113V94L69 0H88L514 632V564L210 113V94L348 0H367L793 632V564L489 113V94L627 0H646L1074 635V654Z'
-const CINZEL_M = 'M1100 -162Q1106 -162 1112 -162V-172Q1084 -176 1049.5 -176.0Q1015 -176 964.5 -161.0Q914 -146 873 -105Q789 -21 771 113L710 558L502 88Q474 27 468 -14H458L199 549L155 52Q153 35 165.5 22.0Q178 9 193 9Q193 9 193 9H209V0H15V10H31Q58 10 78.5 26.5Q99 43 104 70L167 616Q79 789 -44 789Q-55 789 -67 788V798Q-40 805 -23.0 805.0Q-6 805 14.0 803.5Q34 802 61.0 794.0Q88 786 112.0 770.5Q136 755 154.0 738.5Q172 722 188 702Q215 666 231 633L472 111L741 714H750L843 122Q864 -18 933.5 -90.0Q1003 -162 1100 -162Z'
-
-function MarkCompare() {
-  const scale = 0.05
-  return (
-    <div className="mise-compare" aria-label="Logo mark candidates">
-      <svg width={1143 * scale} height={748 * scale} viewBox="-69 -748 1143 748" fill="currentColor" role="img" aria-label="Kihim M"><path d={KIHIM_M} transform="scale(1 -1)" /></svg>
-      <svg width={1179 * scale} height={981 * scale} viewBox="-67 -805 1179 981" fill="currentColor" role="img" aria-label="Cinzel Decorative M"><path d={CINZEL_M} transform="scale(1 -1)" /></svg>
-      <span className="mise-glyph" aria-label="Script m">{'\u{1D4F6}'}</span>
-      <span className="mise-glyph" aria-label="Hooked m">{'\u0271'}</span>
-      <svg height={37} viewBox="0 0 120 48" fill="currentColor" role="img" aria-label="Three-slash M mark"><path d="M0 48 22 0h18L18 48H0Zm30 0L52 0h18L48 48H30Zm30 0L82 0h18L78 48H60Z" /></svg>
-    </div>
-  )
-}
 
 function Arrow() {
   return (
@@ -97,7 +79,7 @@ function LoginPage() {
     arrivedBy === 'invite' || arrivedBy === 'recovery' ? 'set-password' : landingEmail ? 'biz-details' : previewView && PREVIEW_VIEWS.includes(previewView) ? previewView : 'signin',
   )
   const [step, setStep] = useState<'email' | 'password'>('email')
-  const [theme, patchTheme, resetTheme] = useDesignTheme(LOGIN_THEME_KEY, LOGIN_DEFAULT_THEME)
+  const [theme] = useDesignTheme(LOGIN_THEME_KEY, LOGIN_DEFAULT_THEME)
   const r = resolve(theme)
   const dither: [string, string, string] = [r.accent, r.mid, theme.paper]
   const [busy, setBusy] = useState(false)
@@ -204,7 +186,6 @@ function LoginPage() {
       {mode !== 'biz-email' && (
         <div className="mise-dots"><DotField color={tone === 'dark' ? mix('#f4f2ef', '#1a1919', 0.76) : mix(theme.ink, theme.paper, 0.76)} /></div>
       )}
-      <DesignPanel theme={theme} onChange={patchTheme} onReset={resetTheme} surface="login" />
       <div className="mise-content">{children}</div>
     </div>
   )
@@ -219,7 +200,7 @@ function LoginPage() {
           <button type="button" className="mise-card-close" aria-label="Back to Mise" onClick={() => window.location.assign('/landing.html')}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m3 3 10 10M13 3 3 13" stroke="currentColor" strokeWidth="1.4" /></svg>
           </button>
-          <div className="mise-logo mise-logo-center"><span className="mise-word">Mise</span></div>
+          <a className="mise-logo mise-logo-center" href="/landing.html" aria-label="Mise home"><span className="mise-word"><MiseWordmark /></span></a>
           <h1 id="biz-title" className="mise-card-title">Run the restaurant. Leave the rest to us.</h1>
           <p className="mise-card-lead">Mise builds the software behind your operations, from orders to admin, so you can spend your time on the food and the guests you love.</p>
           {messages}
@@ -228,7 +209,7 @@ function LoginPage() {
               type="email" required autoFocus autoComplete="email" aria-label="Work email" placeholder="Enter your work email"
               value={f.email} onChange={(e) => { set('email')(e.target.value); setError('') }}
             />
-            <button type="submit">Request a demo</button>
+            <button type="submit">Continue</button>
           </form>
           <ul className="mise-checks">
             <li><Check />Built for your specific problems</li>
@@ -249,19 +230,19 @@ function LoginPage() {
   if (mode === 'biz-details' || mode === 'biz-done') {
     return shell(
       <div className="mise-demo">
-        <button type="button" className="mise-back" onClick={() => (mode === 'biz-done' ? window.location.assign('/landing.html') : go('biz-email'))}>
+        <button type="button" className="mise-back" onClick={() => window.location.assign('/landing.html')}>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M9 2 4 7l5 5" stroke="currentColor" strokeWidth="1.4" /></svg>
-          {mode === 'biz-done' ? 'Back to Mise' : 'Back'}
+          Back to Mise
         </button>
         <section className="mise-demo-form" aria-labelledby="demo-title">
           {mode === 'biz-done' ? (
             <>
               <h1 id="demo-title">Thank you{f.first ? `, ${f.first.trim()}` : ''}.</h1>
-              <p className="mise-demo-lead">We received your request and will reach out to {f.email} to set up your demo.</p>
+              <p className="mise-demo-lead">We received your request and will reach out to {f.email} to schedule your call.</p>
             </>
           ) : (
             <>
-              <h1 id="demo-title">Request a demo</h1>
+              <h1 id="demo-title">Book a call</h1>
               {messages}
               <form onSubmit={submitDemo}>
                 <div className="rf rf-locked">
@@ -284,7 +265,7 @@ function LoginPage() {
                   ))}
                 </fieldset>
                 <p className="mise-demo-fine">Don't worry. This is not a commitment.</p>
-                <button type="submit" className="mise-submit" disabled={busy || !supabase}>{busy ? 'One moment…' : 'Request a demo'}</button>
+                <button type="submit" className="mise-submit" disabled={busy || !supabase}>{busy ? 'One moment…' : 'Book a call'}</button>
               </form>
             </>
           )}
@@ -307,8 +288,10 @@ function LoginPage() {
   return shell(
     <div className="mise-frame">
       <header className="mise-top">
-        <MarkCompare />
-
+        <a className="mise-back" href="/landing.html">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M9 2 4 7l5 5" stroke="currentColor" strokeWidth="1.4" /></svg>
+          Back to Mise
+        </a>
       </header>
 
       <main className="mise-main">

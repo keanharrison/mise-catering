@@ -40,9 +40,6 @@ button { font: inherit; }
 .mise-top { display: flex; align-items: center; gap: 28px; padding: 40px 56px 0; }
 .mise-skip { display: block; margin: 22px auto 0; padding: 0; border: 0; background: none; color: #6b6b6b; font-size: 13px; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
 .mise-skip:hover { color: #111; }
-.mise-compare { display: flex; align-items: flex-end; gap: 24px; color: var(--ink); }
-.mise-compare svg { display: block; }
-.mise-glyph { font-size: 44px; line-height: 1; }
 .mise-logo { display: inline-block; color: var(--ink); text-decoration: none; font-size: 30px; line-height: 1; }
 /* Wordmark follows Ramp's type spec; TWK Lausanne is licensed and not bundled, so it falls back to the page font. */
 .mise-word { font-family: 'TWK Lausanne', var(--sans); font-size: 1em; font-weight: 400; letter-spacing: -0.01em; text-rendering: optimizeLegibility; }
@@ -158,3 +155,12 @@ button { font: inherit; }
 .mise-content { position: relative; z-index: 1; }
 .mise-who-email { flex: 1; min-width: 0; padding: 0; border: 0; background: transparent; color: var(--ink); font: inherit; outline: none; text-overflow: ellipsis; caret-color: transparent; }
 .mise-who-email:focus { background: color-mix(in srgb, var(--line) 25%, transparent); }
+
+.mise-wordmark { display: inline-flex; align-items: center; gap: 0.18em; }
+.mise-wordmark-mark { width: 0.95em; height: 0.95em; flex: none; }
+.mise-logo-center { display: flex; justify-content: center; }
+.mise-back { text-decoration: none; }
+
+/* Back to Mise sits in the same spot on every screen that has it */
+.mise-back { position: fixed; top: 28px; left: 56px; z-index: 2; margin: 0; padding: 6px 0; font-size: 14px; line-height: 1.2; }
+@media (max-width: 560px) { .mise-back { left: 20px; top: 20px; } }
