@@ -3,10 +3,10 @@ import { useEffect, useRef, useState } from 'react'
 const SIGN_IN_URL = '/pearl-login.html'
 const DEMO_URL = '/pearl-login.html?view=biz-email'
 
-const PRODUCT_LINKS = [
-  { label: 'Order assistant', href: '#how-it-works', note: 'Customers describe an event and get a proposed order.' },
-  { label: 'Staff review', href: '#how-it-works', note: 'Your team confirms, asks, or changes every order.' },
-]
+// Placeholder until the application flow exists.
+// Placeholder until there is a pricing page.
+const PRICING_URL = '#'
+
 
 function Chevron() {
   return (
@@ -34,6 +34,8 @@ export function Nav() {
   }, [open])
 
   return (
+    <>
+    {open === 'product' && <div className="lp-dim" aria-hidden="true" onClick={() => setOpen(null)} />}
     <nav ref={ref} className="lp-nav" aria-label="Main">
       <div className="lp-nav-inner">
         <a href="/landing.html" className="lp-logo" aria-label="Mise home">Mise</a>
@@ -46,24 +48,13 @@ export function Nav() {
             >
               Product<Chevron />
             </button>
-            {open === 'product' && (
-              <div id="lp-product-menu" className="lp-menu">
-                {PRODUCT_LINKS.map((l) => (
-                  <a key={l.label} href={l.href} className="lp-menu-link" onClick={() => setOpen(null)}>
-                    <span>{l.label}</span>
-                    <small>{l.note}</small>
-                  </a>
-                ))}
-              </div>
-            )}
           </li>
-          <li className="lp-item"><a className="lp-link" href="#how-it-works">How it works</a></li>
-          <li className="lp-item"><a className="lp-link" href="#restaurants">For restaurants</a></li>
+          <li className="lp-item"><a className="lp-link" href={PRICING_URL}>Pricing</a></li>
         </ul>
 
         <div className="lp-actions">
           <a className="lp-btn lp-btn-quiet" href={SIGN_IN_URL}>Sign in</a>
-          <a className="lp-btn lp-btn-primary" href={DEMO_URL}>Request a demo</a>
+          <a className="lp-btn lp-btn-primary" href={DEMO_URL}>See a demo</a>
         </div>
 
         <button
@@ -74,17 +65,24 @@ export function Nav() {
         </button>
       </div>
 
+      {open === 'product' && (
+        <div id="lp-product-menu" className="lp-mega">
+          <div className="lp-mega-box">
+            <p className="lp-menu-empty">Coming soon</p>
+          </div>
+        </div>
+      )}
+
       {open === 'mobile' && (
         <div id="lp-mobile" className="lp-mobile">
-          {PRODUCT_LINKS.map((l) => <a key={l.label} href={l.href} onClick={() => setOpen(null)}>{l.label}</a>)}
-          <a href="#how-it-works" onClick={() => setOpen(null)}>How it works</a>
-          <a href="#restaurants" onClick={() => setOpen(null)}>For restaurants</a>
+          <a href={PRICING_URL} onClick={() => setOpen(null)}>Pricing</a>
           <div className="lp-mobile-actions">
             <a className="lp-btn lp-btn-quiet" href={SIGN_IN_URL}>Sign in</a>
-            <a className="lp-btn lp-btn-primary" href={DEMO_URL}>Request a demo</a>
+            <a className="lp-btn lp-btn-primary" href={DEMO_URL}>See a demo</a>
           </div>
         </div>
       )}
     </nav>
+    </>
   )
 }

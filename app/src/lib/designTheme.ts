@@ -222,7 +222,7 @@ export function readStoredTheme(key = KEY, defaults: Theme = DEFAULT_THEME): The
   try { return { ...defaults, ...JSON.parse(localStorage.getItem(key) ?? '{}') } } catch { return defaults }
 }
 
-/** The sign-in page's own look: light green on white, with a charcoal dark mode. Kept apart from the product's saved theme. */
+/** The sign-in and landing pages' own look: light green on white by default, with a dark mode in the Design panel. Kept apart from the product's saved theme. */
 export const LOGIN_THEME_KEY = 'mise-login-theme'
 export const LOGIN_DEFAULT_THEME: Theme = { ...DEFAULT_THEME, accent: '#e6f23a', ink: '#111111', paper: '#ffffff', font: 'hanken' }
 

@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { DesignPanel } from '../components/design/DesignPanel'
 import '../components/design/design-panel.css'
-import { FONTS, LOGIN_DEFAULT_THEME, LOGIN_THEME_KEY, mix, resolve, useDesignTheme } from '../lib/designTheme'
+import { FONTS, LOGIN_DEFAULT_THEME, isDarkPaper, LOGIN_THEME_KEY, mix, resolve, useDesignTheme } from '../lib/designTheme'
 import '../lib/fonts.css'
 import { Cards } from './Cards'
 import { DotField } from './DotField'
@@ -45,15 +45,17 @@ function LandingPage() {
             </div>
           </section>
 
-          <footer id="restaurants" className="lp-footer">
+          <footer id="restaurants" className="lp-footer" data-white={isDarkPaper(theme.paper)}>
             <div className="lp-footer-inner">
               <span className="lp-footer-mark">Mise</span>
-              <ul className="lp-footer-links">
-                <li><a href={LINKEDIN_URL} onClick={(e) => { if (LINKEDIN_URL === '#') e.preventDefault() }}>LinkedIn</a></li>
-                <li><a href={DEMO_URL}>Request a demo</a></li>
-                <li><a href="/pearl-login.html">Sign in</a></li>
-              </ul>
-              <p className="lp-footer-legal">© 2026 Mise</p>
+              <div className="lp-footer-right">
+                <ul className="lp-footer-links">
+                  <li><a href={LINKEDIN_URL} onClick={(e) => { if (LINKEDIN_URL === '#') e.preventDefault() }}>LinkedIn</a></li>
+                  <li><a href={DEMO_URL}>Request a demo</a></li>
+                  <li><a href="/pearl-login.html">Sign in</a></li>
+                </ul>
+                <p className="lp-footer-legal">© 2026 Mise</p>
+              </div>
             </div>
           </footer>
         </>

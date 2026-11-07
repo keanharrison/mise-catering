@@ -1,27 +1,28 @@
 import { CardArt, type ArtKind } from './CardArt'
 
-type Card = { art: ArtKind; question: string; title: string; detail: string }
+// Each card names something that happens in a restaurant's back office, then what it costs the owner.
+// No statistics on purpose: add real numbers only when there is a source for them.
+type Card = { art: ArtKind; pain: string; effect: string }
 
-// Six moments from a restaurant's back office, in one fanned row of square cards. (`detail` is kept for later; the square card shows only the question and title.)
 const CARDS: Card[] = [
-  { art: 'receipt', question: "Where's that receipt?", title: 'The shoebox', detail: 'Paper receipts pile up until someone types them in.' },
-  { art: 'sheet', question: 'Whose spreadsheet is this?', title: 'Quantities, final_v7', detail: "Prep counts that live on one person's laptop." },
-  { art: 'phone', question: 'Can you cater for 40?', title: 'The call during rush', detail: 'The same questions, answered again instead of cooking.' },
-  { art: 'calendar', question: 'Who put it on the calendar?', title: 'Typed in by hand', detail: 'Order details copied between systems, one at a time.' },
-  { art: 'slip', question: 'What did the slip say?', title: '"trays???"', detail: 'Handwriting nobody can read at 6 AM.' },
-  { art: 'inbox', question: 'How many unread?', title: 'Re: Re: Fwd:', detail: 'Orders buried in email threads.' },
+  { art: 'phone', pain: 'Orders arrive by phone and email', effect: 'Hours lost every week answering the same questions.' },
+  { art: 'receipt', pain: 'Receipts pile up in a drawer', effect: 'Month-end turns into a scramble for the bookkeeper.' },
+  { art: 'calendar', pain: 'Schedules are built by hand', effect: 'Every shift swap becomes a thread of texts.' },
+  { art: 'sheet', pain: 'Inventory is counted on paper', effect: 'You only see the waste and over-ordering later.' },
+  { art: 'slip', pain: 'Orders are written, then retyped', effect: 'Small mistakes reach the kitchen and the customer.' },
+  { art: 'inbox', pain: 'Guest messages sit unread', effect: 'Regulars and new customers go unanswered.' },
 ]
 
 /** A fanned row of punch-hole cards. Hovering one straightens it and nudges its neighbors aside. */
 export function Cards({ colors }: { colors: [string, string, string] }) {
   return (
-    <div className="lp-cards" role="list" aria-label="Back-office moments Mise replaces">
+    <div className="lp-cards" role="list" aria-label="Common back-office problems in a restaurant">
       {CARDS.map((card, i) => (
-        <div key={card.title} className="lp-mini" role="listitem">
+        <div key={card.pain} className="lp-mini" role="listitem">
           <CardArt kind={card.art} colors={colors} seed={i} />
           <div className="lp-mini-body">
-            <p className="lp-mini-q">{card.question}</p>
-            <h3 className="lp-mini-title">{card.title}</h3>
+            <h3 className="lp-mini-title">{card.pain}</h3>
+            <p className="lp-mini-effect">{card.effect}</p>
           </div>
         </div>
       ))}

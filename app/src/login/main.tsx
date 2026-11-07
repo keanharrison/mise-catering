@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import { DEMO_EMAIL_KEY, WORK_EMAIL_ERROR, isWorkEmail } from '../lib/workEmail'
 import { fetchProfile, homeFor, isStaffRole, requestDemo, saveProfileLocally, sendPasswordReset, setPassword, signIn, signUp } from '../state/auth'
 import { DitherPanel } from './DitherPanel'
+import { DotField } from '../landing/DotField'
 import { DesignPanel } from '../components/design/DesignPanel'
 import '../components/design/design-panel.css'
 import { FONTS, LOGIN_DEFAULT_THEME, LOGIN_THEME_KEY, mix, resolve, useDesignTheme } from './theme'
@@ -57,6 +58,7 @@ const INTERESTS = [
   'Analytics from real orders',
   'Calendar and integrations',
   'Menu, prices and portion setup',
+  'Other - not listed',
 ]
 
 function Field(props: { id: string; label: string; type?: string; value: string; onChange: (v: string) => void; autoComplete?: string; autoFocus?: boolean; required?: boolean; minLength?: number; readOnly?: boolean }) {
@@ -199,8 +201,11 @@ function LoginPage() {
       className={`mise-page mise-${tone}`}
       style={{ '--line': r.accent, '--line-hover': r.hover, '--on-accent': r.onAccent, '--line-text': r.accentText, '--sans': FONTS[theme.font].stack, ...(tone === 'light' ? { '--ink': theme.ink, '--paper': theme.paper, '--muted': mix(theme.ink, theme.paper, 0.42), '--edge': mix(theme.ink, theme.paper, 0.79), '--edge-focus': mix(theme.ink, theme.paper, 0.36) } : {}) } as React.CSSProperties}
     >
+      {mode !== 'biz-email' && (
+        <div className="mise-dots"><DotField color={tone === 'dark' ? mix('#f4f2ef', '#1a1919', 0.76) : mix(theme.ink, theme.paper, 0.76)} /></div>
+      )}
       <DesignPanel theme={theme} onChange={patchTheme} onReset={resetTheme} surface="login" />
-      {children}
+      <div className="mise-content">{children}</div>
     </div>
   )
 
@@ -211,23 +216,23 @@ function LoginPage() {
         <DitherPanel seed={1018} colors={dither} cell={theme.cell} className="mise-bizbg-art" />
         <div className="mise-bizbg-veil" />
         <section className="mise-card" aria-labelledby="biz-title">
-          <button type="button" className="mise-card-close" aria-label="Back to sign in" onClick={() => go('signin')}>
+          <button type="button" className="mise-card-close" aria-label="Back to Mise" onClick={() => window.location.assign('/landing.html')}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m3 3 10 10M13 3 3 13" stroke="currentColor" strokeWidth="1.4" /></svg>
           </button>
           <div className="mise-logo mise-logo-center"><span className="mise-word">Mise</span></div>
-          <h1 id="biz-title" className="mise-card-title">See Mise on your menu.</h1>
-          <p className="mise-card-lead">Tell us where to reach you. We'll set up a demo around your restaurant's real menu and prices.</p>
+          <h1 id="biz-title" className="mise-card-title">Run the restaurant. Leave the rest to us.</h1>
+          <p className="mise-card-lead">Mise builds the software behind your operations, from orders to admin, so you can spend your time on the food and the guests you love.</p>
           {messages}
           <form className="mise-claim" onSubmit={submitWorkEmail}>
             <input
-              type="email" required autoFocus autoComplete="email" aria-label="Work email" placeholder="you@yourrestaurant.com"
+              type="email" required autoFocus autoComplete="email" aria-label="Work email" placeholder="Enter your work email"
               value={f.email} onChange={(e) => { set('email')(e.target.value); setError('') }}
             />
             <button type="submit">Request a demo</button>
           </form>
           <ul className="mise-checks">
-            <li><Check />Built around your menu</li>
-            <li><Check />Your team confirms every order</li>
+            <li><Check />Built for your specific problems</li>
+            <li><Check />Your team runs what matters most</li>
             <li><Check />No commitment</li>
           </ul>
           {import.meta.env.DEV && (
@@ -244,9 +249,9 @@ function LoginPage() {
   if (mode === 'biz-details' || mode === 'biz-done') {
     return shell(
       <div className="mise-demo">
-        <button type="button" className="mise-back" onClick={() => go(mode === 'biz-done' ? 'signin' : 'biz-email')}>
+        <button type="button" className="mise-back" onClick={() => (mode === 'biz-done' ? window.location.assign('/landing.html') : go('biz-email'))}>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M9 2 4 7l5 5" stroke="currentColor" strokeWidth="1.4" /></svg>
-          {mode === 'biz-done' ? 'Back to sign in' : 'Back'}
+          {mode === 'biz-done' ? 'Back to Mise' : 'Back'}
         </button>
         <section className="mise-demo-form" aria-labelledby="demo-title">
           {mode === 'biz-done' ? (
@@ -290,7 +295,7 @@ function LoginPage() {
   }
 
   const copy: Record<'signin' | 'staff' | 'signup' | 'check-email' | 'set-password', { title: string; lead?: string; cta: string }> = {
-    signin: { title: 'Welcome to Mise', cta: step === 'email' ? 'Continue' : 'Log in' },
+    signin: { title: 'Welcome back to Mise', cta: step === 'email' ? 'Continue' : 'Log in' },
     staff: { title: 'Staff sign in', lead: 'For restaurant teams with an invitation.', cta: step === 'email' ? 'Continue' : 'Log in' },
     signup: { title: 'Create your account', lead: 'Save your details so ordering is faster next time.', cta: 'Create account' },
     'set-password': { title: 'Set a password', lead: 'Choose a password to finish setting up your account.', cta: 'Save password' },
@@ -318,7 +323,10 @@ function LoginPage() {
               {mode !== 'set-password' && (
                 signinLike && step === 'password' ? (
                   <div className="mise-who">
-                    <span>{f.email}</span>
+                    <input
+                      className="mise-who-email" type="text" readOnly value={f.email} aria-label="Email address"
+                      onKeyDown={(e) => { const t = e.currentTarget; const all = t.selectionStart === 0 && t.selectionEnd === t.value.length; if (all && (e.key === 'Backspace' || e.key === 'Delete')) { e.preventDefault(); set('email')(''); setStep('email'); setError('') } }}
+                    />
                     <button type="button" onClick={() => { setStep('email'); setError('') }}>Change</button>
                   </div>
                 ) : (
@@ -348,10 +356,11 @@ function LoginPage() {
         </section>
       </main>
 
-      <footer className="mise-footer">
-        {mode === 'signin' && <button type="button" onClick={() => go('signup')}>Ordering catering? Create a customer account</button>}
-        {mode !== 'staff' && <button type="button" onClick={() => go('staff')}>Staff sign in</button>}
-      </footer>
+      {mode !== 'signin' && (
+        <footer className="mise-footer">
+          {mode !== 'staff' && <button type="button" onClick={() => go('staff')}>Staff sign in</button>}
+        </footer>
+      )}
     </div>,
   )
 }
